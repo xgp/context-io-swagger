@@ -1,0 +1,2883 @@
+swagger: '2.0'
+info:
+  version: "0.0.0"
+  title: Context
+host: api.context.io
+schemes:
+  - https
+basePath: /2.0
+produces:
+  - application/json
+paths:
+  /accounts:
+    get:
+      description: |
+        List of accounts
+      parameters:
+        -
+          name: email
+          in: query
+          description: Only return account associated to this email address
+          required: false
+          type: string
+        -
+          name: status
+          in: query
+          description: Only return accounts with sources whose status is of a specific value. If an account has many sources, only those matching the given value will be included in the response. Possible statuses are INVALID_CREDENTIALS, CONNECTION_IMPOSSIBLE, NO_ACCESS_TO_ALL_MAIL, OK, TEMP_DISABLED and DISABLED
+          required: false
+          type: string
+        -
+          name: status_ok
+          in: query
+          description: Set to 0 to get all accounts with sources that are not working correctly. Set to 1 for the opposite. As for the status filter above, only sources matching the specific value are included in the response.
+          required: false
+          type: integer
+        -
+          name: limit
+          in: query
+          description: The maximum number of results to return. The maximum limit is 250.
+          required: false
+          type: integer
+        -
+          name: offset
+          in: query
+          description: Start the list at this offset (zero-based).
+          required: false
+          type: integer
+      responses:
+        200:
+          description: Successful response
+          schema:
+            title: ArrayOfAccounts
+            type: array
+            items:
+              $ref: '#/definitions/Account'
+    post:
+      description: |
+        Add a new account
+      parameters:
+        -
+          name: email
+          in: query
+          description: The primary email address of the account holder. Either email or migrate_account_id must be specified
+          required: false
+          type: string
+        -
+          name: migrate_account_id
+          in: query
+          description: Existing user_id (from lite) you want to migrate to 2.0. Either migrate_account_id or email must be specified
+          required: false
+          type: string
+        -
+          name: first_name
+          in: query
+          description: First name of the account holder
+          required: false
+          type: string
+        -
+          name: last_name
+          in: query
+          description: Last name of the account holder
+          required: false
+          type: string
+      responses:
+        200:
+          description: Successful response
+          schema:
+            $ref: '#/definitions/NewAccount'
+  /accounts/{id}:
+    get:
+      description: |
+        Remove a given account
+      parameters:
+        -
+          name: id
+          in: path
+          description: Unique id of an account accessible through your API key
+          required: true
+          type: string
+      responses:
+        200:
+          description: Successful response
+          schema:
+            $ref: '#/definitions/Account'
+    delete:
+      description: |
+        Details about a given account
+      parameters:
+        -
+          name: id
+          in: path
+          description: Unique id of an account accessible through your API key
+          required: true
+          type: string
+      responses:
+        200:
+          description: Successful response
+          schema:
+            $ref: '#/definitions/Result'
+    post:
+      description: |
+        Modify a given account
+      parameters:
+        -
+          name: id
+          in: path
+          description: Unique id of an account accessible through your API key
+          required: true
+          type: string
+      responses:
+        200:
+          description: Successful response
+          schema:
+            $ref: '#/definitions/Result'
+  /accounts/{id}/connect_tokens:
+    get:
+      description: |
+        List of connect tokens created for an account
+      parameters:
+        -
+          name: id
+          in: path
+          description: Unique id of an account accessible through your API key
+          required: true
+          type: string
+      responses:
+        200:
+          description: Successful response
+          schema:
+            title: ArrayOfConnectTokens
+            type: array
+            items:
+              $ref: '#/definitions/ConnectToken'
+    post:
+      description: |
+        Obtain a new connect_token for a specific account
+      parameters:
+        -
+          name: id
+          in: path
+          description: Unique id of an account accessible through your API key
+          required: true
+          type: string
+        -
+          name: callback_url
+          in: query
+          description: When the user\'s mailbox is connected to your API key, the browser will call this url (GET). This call will have a parameter called contextio_token indicating the connect_token related to this callback. You can then do a get on this connect_token to obtain details about the account and source created through that token and save that account id in your own user data.
+          required: true
+          type: string
+        -
+          name: email
+          in: query
+          description: The email address of the account to be added. If specified, the first step of the connect UI where users are prompted for their email address, first name and last name is skipped.
+          required: false
+          type: string
+        -
+          name: first_name
+          in: query
+          description: First name of the account holder.
+          required: false
+          type: string
+        -
+          name: last_name
+          in: query
+          description: Last name of the account holder.
+          required: false
+          type: string
+        -
+          name: source_callback_url
+          in: query
+          description: If specified, we\'ll make a POST request to this URL when the initial sync is completed.
+          required: false
+          type: string
+        -
+          name: source_expunge_on_deleted_flag
+          in: query
+          description: By default, we don\'t filter out messages flagged as deleted. Set this parameter to 1 to turn on this filtering.
+          required: false
+          type: integer
+        -
+          name: source_sync_all_folders
+          in: query
+          description: By default, we filter out some folders like \'Deleted Items\' and \'Spam\'. Set this parameter to 1 to turn off this filtering and show every single folder.
+          required: false
+          type: integer
+        -
+          name: source_raw_file_list
+          in: query
+          description: By default, we filter out files like signature images from the files list. Set this parameter to 1 to turn off this filtering and show every single file attachment.
+          required: false
+          type: integer
+        -
+          name: status_callback_url
+          in: query
+          description: If specified, we\'ll make a POST request to this URL if the connection status of the source changes.
+          required: false
+          type: string
+      responses:
+        200:
+          description: Successful response
+          schema:
+            $ref: '#/definitions/NewConnectToken'
+  /accounts/{id}/connect_tokens/{token}:
+    get:
+      description: |
+        Information about a given connect token
+      parameters:
+        -
+          name: id
+          in: path
+          description: Unique id of an account accessible through your API key
+          required: true
+          type: string
+        -
+          name: token
+          in: path
+          description: The unique random token used to add a second source to an existing account
+          required: true
+          type: string
+      responses:
+        200:
+          description: Successful response
+          schema:
+            $ref: '#/definitions/ConnectToken'            
+    delete:
+      description: |
+        Remove a given connect token
+      parameters:
+        -
+          name: id
+          in: path
+          description: Unique id of an account accessible through your API key
+          required: true
+          type: string
+        -
+          name: token
+          in: path
+          description: The unique random token used to add a second source to an existing account
+          required: true
+          type: string
+      responses:
+        200:
+          description: Successful response
+          schema:
+            $ref: '#/definitions/Result'
+  /accounts/{id}/contacts:
+    get:
+      description: |
+        Listing contacts in an account
+      parameters:
+        -
+          name: id
+          in: path
+          description: Unique id of an account accessible through your API key
+          required: true
+          type: string
+        -
+          name: search
+          in: query
+          description: String identifying the name or the email address of the contact(s) you are looking for.
+          required: false
+          type: string
+        -
+          name: active_before
+          in: query
+          description: Only include contacts included in at least one email dated before a given time. This parameter should be a standard Unix timestamp
+          required: false
+          type: integer
+        -
+          name: active_after
+          in: query
+          description: Only include contacts included in at least one email dated after a given time. This parameter should be a standard Unix timestamp
+          required: false
+          type: integer
+        -
+          name: sort_by
+          in: query
+          description: The field by which to sort the returned results. Possible values are email, count, received_count and sent_count
+          required: false
+          type: string
+        -
+          name: sort_order
+          in: query
+          description: The sort order of the returned results. Possible values are asc and desc
+          required: false
+          type: string
+        -
+          name: limit
+          in: query
+          description: The maximum number of results to return. The maximum limit is 250.
+          required: false
+          type: integer
+        -
+          name: offset
+          in: query
+          description: Start the list at this offset (zero-based).
+          required: false
+          type: integer
+      responses:
+        200:
+          description: Successful response
+          schema:
+            $ref: '#/definitions/ContactList'
+  /accounts/{id}/contacts/{email}:
+    get:
+      description: |
+        Listing contacts in an account
+      parameters:
+        -
+          name: id
+          in: path
+          description: Unique id of an account accessible through your API key
+          required: true
+          type: string
+        -
+          name: email
+          in: path
+          description: Email address of a contact
+          required: true
+          type: string
+      responses:
+        200:
+          description: Successful response
+          schema:
+            $ref: '#/definitions/Contact'            
+  /accounts/{id}/contacts/{email}/files:
+    get:
+      description: |
+        Listing files exchanged with a contact
+      parameters:
+        -
+          name: id
+          in: path
+          description: Unique id of an account accessible through your API key
+          required: true
+          type: string
+        -
+          name: email
+          in: path
+          description: Email address of a contact
+          required: true
+          type: string
+        -
+          name: limit
+          in: query
+          description: The maximum number of results to return. The maximum limit is 100.
+          required: false
+          type: integer
+        -
+          name: limit
+          in: query
+          description: Start the list at this offset (zero-based).
+          required: false
+          type: integer
+      responses:
+        200:
+          description: Successful response
+          schema:
+            title: ArrayOfFiles
+            type: array
+            items:
+              $ref: '#/definitions/FileInfo'
+  /accounts/{id}/contacts/{email}/messages:
+    get:
+      description: |
+        Listing messages where a contact is present
+      parameters:
+        -
+          name: id
+          in: path
+          description: Unique id of an account accessible through your API key
+          required: true
+          type: string
+        -
+          name: email
+          in: path
+          description: Email address of a contact
+          required: true
+          type: string
+        -
+          name: limit
+          in: query
+          description: The maximum number of results to return. The maximum limit is 100.
+          required: false
+          type: integer
+        -
+          name: limit
+          in: query
+          description: Start the list at this offset (zero-based).
+          required: false
+          type: integer
+      responses:
+        200:
+          description: Successful response
+          schema:
+            title: ArrayOfMessages
+            type: array
+            items:
+              $ref: '#/definitions/MessageInfo'
+  /accounts/{id}/contacts/{email}/threads:
+    get:
+      description: |
+        Listing threads where a contact is present
+      parameters:
+        -
+          name: id
+          in: path
+          description: Unique id of an account accessible through your API key
+          required: true
+          type: string
+        -
+          name: email
+          in: path
+          description: Email address of a contact
+          required: true
+          type: string
+        -
+          name: limit
+          in: query
+          description: The maximum number of results to return. The maximum limit is 100.
+          required: false
+          type: integer
+        -
+          name: offset
+          in: query
+          description: Start the list at this offset (zero-based).
+          required: false
+          type: integer
+      responses:
+        200:
+          description: Successful response
+          schema:
+            title: ArrayOfThread
+            type: array
+            items:
+              type: string
+  /accounts/{id}/email_addresses:
+    get:
+      description: |
+        List of email addresses used by an account
+      parameters:
+        -
+          name: id
+          in: path
+          description: Unique id of an account accessible through your API key
+          required: true
+          type: string
+      responses:
+        200:
+          description: Successful response
+          schema:
+            title: ArrayOfThread
+            type: array
+            items:
+              $ref: "#/definitions/EmailAlias"
+    post:
+      description: |
+        Adding a new email addresses as an alias for an account
+      parameters:
+        -
+          name: id
+          in: path
+          description: Unique id of an account accessible through your API key
+          required: true
+          type: string
+        -
+          name: email_address
+          in: query
+          description: An email address
+          required: true
+          type: string
+      responses:
+        200:
+          description: Successful response
+          schema:
+            $ref: "#/definitions/NewEmailAlias"
+  /accounts/{id}/email_addresses/{email}:
+    post:
+      description: |
+        Modifiying a given email address
+      parameters:
+        -
+          name: id
+          in: path
+          description: Unique id of an account accessible through your API key
+          required: true
+          type: string
+        -
+          name: email
+          in: path
+          description: One of the email addresses associated to the account
+          required: true
+          type: string
+        -
+          name: primary
+          in: query
+          description: Set to 1 to make this email address the primary one for the account
+          required: false
+          type: integer
+      responses:
+        200:
+          description: Successful response
+          schema:
+            $ref: "#/definitions/Result"
+    delete:
+      description: |
+        Removing an email addresses form the aliases of an account
+      parameters:
+        -
+          name: id
+          in: path
+          description: Unique id of an account accessible through your API key
+          required: true
+          type: string
+        -
+          name: email
+          in: path
+          description: One of the email addresses associated to the account
+          required: true
+          type: string
+      responses:
+        200:
+          description: Successful response
+          schema:
+            $ref: "#/definitions/Result"
+  /accounts/{id}/files:
+    get:
+      description: |
+        Listings of files found as email attachments
+      parameters:
+        -
+          name: id
+          in: path
+          description: Unique id of an account accessible through your API key
+          required: true
+          type: string
+        -
+          name: file_name
+          in: query
+          require: false
+          type: string
+          description: Search for files based on their name. You can filter names using typical shell wildcards such as *, ? and [] or regular expressions by enclosing the search expression in a leading / and trailing /. For example, *.pdf would give you all PDF files while /\.jpe?g$/ would return all files whose name ends with .jpg or .jpeg
+        -
+          name: file_size_min
+          in: query
+          require: false
+          type: integer
+          description: Search for files based on their size (in bytes).
+        -
+          name: file_size_max
+          in: query
+          require: false
+          type: integer
+          description: Search for files based on their size (in bytes).
+        -
+          name: email
+          in: query
+          require: false
+          type: string
+          description: Email address of the contact for whom you want the latest files exchanged with. By "exchanged with contact X" we mean any email received from contact X, sent to contact X or sent by anyone to both contact X and the source owner.
+        -
+          name: to
+          in: query
+          require: false
+          type: string
+          description: Email address of a contact files have been sent to.
+        -
+          name: from
+          in: query
+          require: false
+          type: string
+          description: Email address of a contact files have been received from.
+        -
+          name: cc
+          in: query
+          require: false
+          type: string
+          description: Email address of a contact CC\'ed on the messages.
+        -
+          name: bcc
+          in: query
+          require: false
+          type: string
+          description: Email address of a contact BCC\'ed on the messages.
+        -
+          name: date_before
+          in: query
+          require: false
+          type: integer 
+          description: "Only include files attached to messages sent before a given timestamp. The value this filter is applied to is the Date: header of the message which refers to the time the message is sent from the origin."
+        -
+          name: date_after
+          in: query
+          require: false
+          type: integer 
+          description: "Only include files attached to messages sent after a given timestamp. The value this filter is applied to is the Date: header of the message which refers to the time the message is sent from the origin."
+        -
+          name: indexed_before
+          in: query
+          require: false
+          type: integer 
+          description: Only include files attached to messages indexed before a given timestamp. This is not the same as the date of the email, it is the time Context.IO indexed this message.
+        -
+          name: indexed_after
+          in: query
+          require: false
+          type: integer 
+          description: Only include files attached to messages indexed after a given timestamp. This is not the same as the date of the email, it is the time Context.IO indexed this message.
+        -
+          name: source
+          in: query
+          require: false
+          type: string
+          description: Filter messages by the account source label.
+        -
+          name: sort_order
+          in: query
+          require: false
+          type: string
+          description: The sort order of the returned results. Possible values are asc and desc
+        -
+          name: limit
+          in: query
+          require: false
+          type: integer
+          description: The maximum number of results to return. The maximum limit is 100.
+        -
+          name: offset
+          in: query
+          require: false
+          type: integer
+          description: Start the list at this offset (zero-based).
+      responses:
+        200:
+          description: Successful response
+          schema:
+            title: ArrayOfFiles
+            type: array
+            items:
+              $ref: "#/definitions/FileInfo"
+  /accounts/{id}/files/{file_id}:
+    get:
+      description: |
+        Details for a given file
+      parameters:
+        -
+          name: id
+          in: path
+          description: Unique id of an account accessible through your API key
+          required: true
+          type: string
+        -
+          name: file_id
+          in: path
+          description: Unique id of a file
+          required: true
+          type: string
+      responses:
+        200:
+          description: Successful response
+          schema:
+            $ref: "#/definitions/FileInfo"
+  /accounts/{id}/files/{file_id}/content:
+    get:
+      description: |
+        Download a given file
+      parameters:
+        -
+          name: id
+          in: path
+          description: Unique id of an account accessible through your API key
+          required: true
+          type: string
+        -
+          name: file_id
+          in: path
+          description: Unique id of a file
+          required: true
+          type: string
+        -
+          name: as_link
+          in: query
+          description: "Set this parameter to 1 to get a tokenized public link to download the file rather than the content itself. This is an alternative to setting Accept: text/uri-list in the request headers and will return the exact same response."
+          required: false
+          type: integer
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: file
+  /accounts/{id}/files/{file_id}/related:
+    get:
+      description: |
+        List of other files related to a given file
+      parameters:
+        -
+          name: id
+          in: path
+          description: Unique id of an account accessible through your API key
+          required: true
+          type: string
+        -
+          name: file_id
+          in: path
+          description: Unique id of a file
+          required: true
+          type: string
+      responses:
+        200:
+          description: Successful response
+          schema:
+            title: ArrayOfFiles
+            type: array
+            items:
+              $ref: "#/definitions/FileInfo"
+  /accounts/{id}/messages:
+    get:
+      description: |
+        Listings of email messages for an account
+      parameters:
+        -
+          name: id
+          in: path
+          description: Unique id of an account accessible through your API key
+          required: true
+          type: string
+        -
+          name: subject
+          in: query
+          description: Get messages whose subject matches this search string. To use regular expressions instead of simple string matching, make sure the string starts and ends with /.
+          required: false
+          type: string
+        -
+          name: email
+          in: query
+          require: false
+          type: string
+          description: Email address of the contact for whom you want the latest files exchanged with. By "exchanged with contact X" we mean any email received from contact X, sent to contact X or sent by anyone to both contact X and the source owner.
+        -
+          name: to
+          in: query
+          require: false
+          type: string
+          description: Email address of a contact files have been sent to.
+        -
+          name: from
+          in: query
+          require: false
+          type: string
+          description: Email address of a contact files have been received from.
+        -
+          name: cc
+          in: query
+          require: false
+          type: string
+          description: Email address of a contact CC\'ed on the messages.
+        -
+          name: bcc
+          in: query
+          require: false
+          type: string
+          description: Email address of a contact BCC\'ed on the messages.
+        -
+          name: folder
+          in: query
+          description: Filter messages by the folder (or Gmail label). This parameter can be the complete folder name with the appropriate hierarchy delimiter for the mail server being queried (eg. Inbox/My folder) or the "symbolic name" of the folder (eg. \Starred). The symbolic name refers to attributes used to refer to special use folders in a language-independent way. See RFC-6154. 
+          required: false
+          type: string
+        -
+          name: source
+          in: query
+          require: false
+          type: string
+          description: Filter messages by the account source label.
+        -
+          name: file_name
+          in: query
+          require: false
+          type: string
+          description: Search for files based on their name. You can filter names using typical shell wildcards such as *, ? and [] or regular expressions by enclosing the search expression in a leading / and trailing /. For example, *.pdf would give you all PDF files while /\.jpe?g$/ would return all files whose name ends with .jpg or .jpeg
+        -
+          name: file_size_min
+          in: query
+          require: false
+          type: integer
+          description: Search for files based on their size (in bytes).
+        -
+          name: file_size_max
+          in: query
+          require: false
+          type: integer
+          description: Search for files based on their size (in bytes).
+        -
+          name: date_before
+          in: query
+          require: false
+          type: integer 
+          description: "Only include files attached to messages sent before a given timestamp. The value this filter is applied to is the Date: header of the message which refers to the time the message is sent from the origin."
+        -
+          name: date_after
+          in: query
+          require: false
+          type: integer 
+          description: "Only include files attached to messages sent after a given timestamp. The value this filter is applied to is the Date: header of the message which refers to the time the message is sent from the origin."
+        -
+          name: indexed_before
+          in: query
+          require: false
+          type: integer 
+          description: Only include files attached to messages indexed before a given timestamp. This is not the same as the date of the email, it is the time Context.IO indexed this message.
+        -
+          name: indexed_after
+          in: query
+          require: false
+          type: integer 
+          description: Only include files attached to messages indexed after a given timestamp. This is not the same as the date of the email, it is the time Context.IO indexed this message.
+        -
+          name: include_thread_size
+          in: query
+          require: false
+          type: integer 
+          description: Set to 1 to include thread size in the result.
+        -
+          name: include_body
+          in: query
+          require: false
+          type: integer 
+          description: Set to 1 to include message bodies in the result. Since message bodies must be retrieved from the IMAP server, expect a performance hit when setting this parameter.
+        -
+          name: include_headers
+          in: query
+          require: false
+          type: integer 
+          description: Can be set to 0 (default), 1 or raw. If set to 1, complete message headers, parsed into an array, are included in the results. If set to raw, the headers are also included but as a raw unparsed string. Since full original headers bodies must be retrieved from the IMAP server, expect a performance hit when setting this parameter.
+        -
+          name: include_flags
+          in: query
+          require: false
+          type: integer 
+          description: Set to 1 to include IMAP flags of messages in the result. Since message flags must be retrieved from the IMAP server, expect a performance hit when setting this parameter.
+        -
+          name: body_type
+          in: query
+          require: false
+          type: string
+          description: Used when include_body is set to get only body parts of a given MIME-type (for example text/html) 
+        -
+          name: include_source
+          in: query
+          require: false
+          type: integer 
+          description: Set to 1 to include message sources in the result. Since message sources must be retrieved from the IMAP server, expect a performance hit when setting this parameter.
+        -
+          name: sort_order
+          in: query
+          require: false
+          type: string
+          description: The sort order of the returned results. Possible values are asc and desc
+        -
+          name: limit
+          in: query
+          require: false
+          type: integer
+          description: The maximum number of results to return. The maximum limit is 100.
+        -
+          name: offset
+          in: query
+          require: false
+          type: integer
+          description: Start the list at this offset (zero-based).
+      responses:
+        200:
+          description: Successful response
+          schema:
+            title: ArrayOfFiles
+            type: array
+            items:
+              $ref: "#/definitions/MessageInfo"
+    post:
+      description: |
+        Add a message in a given folder
+      consumes:
+        - multipart/form-data
+      parameters:
+        -
+          name: id
+          in: path
+          description: Unique id of an account accessible through your API key
+          required: true
+          type: string
+        -
+          name: dst_source
+          in: formData
+          description: Label of the source you want the message copied to
+          required: true
+          type: string
+        -
+          name: dst_folder
+          in: formData
+          description: The folder within dst_source the message should be copied to
+          required: true
+          type: string
+        -
+          name: message
+          in: formData
+          description: "Raw RFC-822 message data. If you use the view message source function of your email client, what you'll see there is what we expect to receive here. Hint: you can get this with the accounts/messages/source call."
+          required: true
+          type: file
+        -
+          name: flag_seen
+          in: formData
+          description: Message has been read. Set this parameter to 1 to set the flag, 0 to unset it.
+          required: false
+          type: integer
+        -
+          name: flag_answered
+          in: formData
+          description: Message has been answered. Set this parameter to 1 to set the flag, 0 to unset it.
+          required: false
+          type: integer
+        -
+          name: flag_flagged
+          in: formData
+          description: "Message is flagged for urgent/special attention. Set this parameter to 1 to set the flag, 0 to unset it."
+          required: false
+          type: integer
+        -
+          name: flag_deleted
+          in: formData
+          description: "Message is deleted for later removal. An alternative way of deleting messages is to move it to the Trash folder. Set this parameter to 1 to set the flag, 0 to unset it."
+          required: false
+          type: integer
+        -
+          name: flag_draft
+          in: formData
+          description: Message has not completed composition (marked as a draft). Set this parameter to 1 to set the flag, 0 to unset it.
+          required: false
+          type: integer
+      responses:
+        200:
+          description: Successful response
+          schema:
+            $ref: "#/definitions/Result"
+  /accounts/{id}/messages/{message_id}:
+    get:
+      description: |
+        File, contact and other information about a given email message
+      parameters:
+        -
+          name: id
+          in: path
+          description: Unique id of an account accessible through your API key
+          required: true
+          type: string
+        -
+          name: message_id
+          in: path
+          description: Unique id of a message. This can be the message_id or email_message_id property of the message. The gmail_message_id (prefixed with gm-) can also be used.
+          required: true
+          type: string
+        -
+          name: include_thread_size
+          in: query
+          require: false
+          type: integer 
+          description: Set to 1 to include thread size in the result.
+        -
+          name: include_body
+          in: query
+          require: false
+          type: integer 
+          description: Set to 1 to include message bodies in the result. Since message bodies must be retrieved from the IMAP server, expect a performance hit when setting this parameter.
+        -
+          name: include_headers
+          in: query
+          require: false
+          type: integer 
+          description: Can be set to 0 (default), 1 or raw. If set to 1, complete message headers, parsed into an array, are included in the results. If set to raw, the headers are also included but as a raw unparsed string. Since full original headers bodies must be retrieved from the IMAP server, expect a performance hit when setting this parameter.
+        -
+          name: include_flags
+          in: query
+          require: false
+          type: integer 
+          description: Set to 1 to include IMAP flags of messages in the result. Since message flags must be retrieved from the IMAP server, expect a performance hit when setting this parameter.
+        -
+          name: body_type
+          in: query
+          require: false
+          type: string
+          description: Used when include_body is set to get only body parts of a given MIME-type (for example text/html) 
+        -
+          name: include_source
+          in: query
+          require: false
+          type: integer 
+          description: Set to 1 to include message sources in the result. Since message sources must be retrieved from the IMAP server, expect a performance hit when setting this parameter.
+      responses:
+        200:
+          description: Successful response
+          schema:
+            $ref: "#/definitions/MessageInfo"
+    post:
+      description: |
+        Copy or move a message
+      parameters:
+        -
+          name: id
+          in: path
+          description: Unique id of an account accessible through your API key
+          required: true
+          type: string
+        -
+          name: message_id
+          in: path
+          description: Unique id of a message. This can be the message_id or email_message_id property of the message. The gmail_message_id (prefixed with gm-) can also be used.
+          required: true
+          type: string
+        -
+          name: dst_folder
+          in: query
+          require: false
+          type: string
+          description: The folder within dst_source the message should be copied to
+        -
+          name: dst_source
+          in: query
+          require: false
+          type: string
+          description: "Label of the source you want the message copied to. This field is required if you're moving a message that already exists in one source of the account to another source of that account. If you only want to move the message to a different folder within the same source, dst_folder is sufficient."
+        -
+          name: move
+          in: query
+          require: false
+          type: integer
+          description: By default, this calls copies the original message in the destination. Set this parameter to 1 to move instead of copy.
+        -
+          name: flag_seen
+          in: query
+          require: false
+          type: integer 
+          description: Message has been read. Set this parameter to 1 to set the flag, 0 to unset it.
+        -
+          name: flag_answered
+          in: query
+          require: false
+          type: integer 
+          description: Message has been answered. Set this parameter to 1 to set the flag, 0 to unset it.
+        -
+          name: flag_flagged
+          in: query
+          require: false
+          type: integer 
+          description: Message is flagged for urgent/special attention. Set this parameter to 1 to set the flag, 0 to unset it.
+        -
+          name: flag_deleted
+          in: query
+          require: false
+          type: integer 
+          description: Message is deleted for later removal. An alternative way of deleting messages is to move it to the Trash folder. Set this parameter to 1 to set the flag, 0 to unset it.
+        -
+          name: flag_draft
+          in: query
+          require: false
+          type: integer 
+          description: Message has not completed composition (marked as a draft). Set this parameter to 1 to set the flag, 0 to unset it.
+      responses:
+        200:
+          description: Successful response
+          schema:
+            $ref: "#/definitions/ResultWithConnectionLog"
+    delete:
+      description: |
+        Copy or move a message
+      parameters:
+        -
+          name: id
+          in: path
+          description: Unique id of an account accessible through your API key
+          required: true
+          type: string
+        -
+          name: message_id
+          in: path
+          description: Unique id of a message. This can be the message_id or email_message_id property of the message. The gmail_message_id (prefixed with gm-) can also be used.
+          required: true
+          type: string
+      responses:
+        200:
+          description: Successful response
+          schema:
+            $ref: "#/definitions/ResultWithConnectionLog"
+  /accounts/{id}/messages/{message_id}/body:
+    get:
+      description: |
+        Fetch the message body of a given email
+      parameters:
+        -
+          name: id
+          in: path
+          description: Unique id of an account accessible through your API key
+          required: true
+          type: string
+        -
+          name: message_id
+          in: path
+          description: Unique id of a message. This can be the message_id or email_message_id property of the message. The gmail_message_id (prefixed with gm-) can also be used.
+          required: true
+          type: string
+        -
+          name: type
+          in: query
+          description: Many emails are sent with both rich text and plain text versions in the message body and by default, the response of this call will include both. It is possible to only get either the plain or rich text version by setting the type parameter to text/plain or text/html respectively.
+          required: false
+          type: string
+      responses:
+        200:
+          description: Successful response
+          schema:
+            title: ArrayOfBodyParts
+            type: array
+            items:
+              $ref: "#/definitions/BodyPart"
+  /accounts/{id}/messages/{message_id}/flags:
+    get:
+      description: |
+        Message flags
+      parameters:
+        -
+          name: id
+          in: path
+          description: Unique id of an account accessible through your API key
+          required: true
+          type: string
+        -
+          name: message_id
+          in: path
+          description: Unique id of a message. This can be the message_id or email_message_id property of the message. The gmail_message_id (prefixed with gm-) can also be used.
+          required: true
+          type: string
+      responses:
+        200:
+          description: Successful response
+          schema:
+            $ref: "#/definitions/Flags"
+    post:
+      description: |
+        Set message flags for a given email
+      parameters:
+        -
+          name: id
+          in: path
+          description: Unique id of an account accessible through your API key
+          required: true
+          type: string
+        -
+          name: message_id
+          in: path
+          description: Unique id of a message. This can be the message_id or email_message_id property of the message. The gmail_message_id (prefixed with gm-) can also be used.
+          required: true
+          type: string
+        -
+          name: seen
+          in: query
+          description: Message has been read. Set this parameter to 1 to set the flag, 0 to unset it.
+          required: false
+          type: integer
+        -
+          name: answered
+          in: query
+          description: Message has been answered. Set this parameter to 1 to set the flag, 0 to unset it.
+          required: false
+          type: integer
+        -
+          name: flagged
+          in: query
+          description: Message is flagged for urgent/special attention. Set this parameter to 1 to set the flag, 0 to unset it.
+          required: false
+          type: integer
+        -
+          name: deleted
+          in: query
+          description: Message is deleted for later removal. An alternative way of deleting messages is to move it to the Trash folder. Set this parameter to 1 to set the flag, 0 to unset it.
+          required: false
+          type: integer
+        -
+          name: draft
+          in: query
+          description: Message has not completed composition (marked as a draft). Set this parameter to 1 to set the flag, 0 to unset it.
+          required: false
+          type: integer
+      responses:
+        200:
+          description: Successful response
+          schema:
+            $ref: "#/definitions/ResultWithFlags"
+  /accounts/{id}/messages/{message_id}/folders:
+    get:
+      description: |
+        List of folder a message is in
+      parameters:
+        -
+          name: id
+          in: path
+          description: Unique id of an account accessible through your API key
+          required: true
+          type: string
+        -
+          name: message_id
+          in: path
+          description: Unique id of a message. This can be the message_id or email_message_id property of the message. The gmail_message_id (prefixed with gm-) can also be used.
+          required: true
+          type: string
+      responses:
+        200:
+          description: Successful response
+          schema:
+            title: ArrayOfBodyParts
+            type: array
+            items:
+              $ref: "#/definitions/FolderInfo"
+    post:
+      description: |
+        Edit folders a message should appear in
+      parameters:
+        -
+          name: id
+          in: path
+          description: Unique id of an account accessible through your API key
+          required: true
+          type: string
+        -
+          name: message_id
+          in: path
+          description: Unique id of a message. This can be the message_id or email_message_id property of the message. The gmail_message_id (prefixed with gm-) can also be used.
+          required: true
+          type: string
+        -
+          name: add
+          in: query
+          description: New folder this message should appear in.
+          required: false
+          type: string
+        -
+          name: remove
+          in: query
+          description: Folder this message should be removed from.
+          required: false
+          type: string
+      responses:
+        200:
+          description: Successful response
+          schema:
+            $ref: "#/definitions/Result"
+    put:
+      description: |
+        Set folders a message should appear in
+      parameters:
+        -
+          name: id
+          in: path
+          description: Unique id of an account accessible through your API key
+          required: true
+          type: string
+        -
+          name: message_id
+          in: path
+          description: Unique id of a message. This can be the message_id or email_message_id property of the message. The gmail_message_id (prefixed with gm-) can also be used.
+          required: true
+          type: string
+        -
+          name: body
+          in: body
+          description: The format of the request body follows the format of the GET response above with the exception that you only need to specify either the name or symbolic_name property for each folder the message must appear in.
+          required: true
+          schema:
+            $ref: "#/definitions/FolderInfo"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            $ref: "#/definitions/Result"
+  /accounts/{id}/messages/{message_id}/headers:
+    get:
+      description: |
+        Complete headers of a given email message
+      parameters:
+        -
+          name: id
+          in: path
+          description: Unique id of an account accessible through your API key
+          required: true
+          type: string
+        -
+          name: message_id
+          in: path
+          description: Unique id of a message. This can be the message_id or email_message_id property of the message. The gmail_message_id (prefixed with gm-) can also be used.
+          required: true
+          type: string
+        -
+          name: raw
+          in: query
+          description: By default, this returns messages headers parsed into an array. Set this parameter to 1 to get raw unparsed headers.
+          required: true
+          type: integer
+      responses:
+        200:
+          description: Successful response
+          schema:
+            title: ArrayOfBodyParts
+            type: array
+            items:
+              $ref: "#/definitions/Attributes"
+  /accounts/{id}/messages/{message_id}/source:
+    get:
+      description: |
+        Fetch the message source
+      produces:
+        - message/rfc822
+      parameters:
+        -
+          name: id
+          in: path
+          description: Unique id of an account accessible through your API key
+          required: true
+          type: string
+        -
+          name: message_id
+          in: path
+          description: Unique id of a message. This can be the message_id or email_message_id property of the message. The gmail_message_id (prefixed with gm-) can also be used.
+          required: true
+          type: string
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: file
+  /accounts/{id}/messages/{message_id}/thread:
+    get:
+      description: |
+        List other messages in the same thread as a given message
+      parameters:
+        -
+          name: id
+          in: path
+          description: Unique id of an account accessible through your API key
+          required: true
+          type: string
+        -
+          name: message_id
+          in: path
+          description: Unique id of a message. This can be the message_id or email_message_id property of the message. The gmail_message_id (prefixed with gm-) can also be used.
+          required: true
+          type: string
+        -
+          name: include_body
+          in: query
+          require: false
+          type: integer 
+          description: Set to 1 to include message bodies in the result. Since message bodies must be retrieved from the IMAP server, expect a performance hit when setting this parameter.
+        -
+          name: include_headers
+          in: query
+          require: false
+          type: integer 
+          description: Can be set to 0 (default), 1 or raw. If set to 1, complete message headers, parsed into an array, are included in the results. If set to raw, the headers are also included but as a raw unparsed string. Since full original headers bodies must be retrieved from the IMAP server, expect a performance hit when setting this parameter.
+        -
+          name: include_flags
+          in: query
+          require: false
+          type: integer 
+          description: Set to 1 to include IMAP flags of messages in the result. Since message flags must be retrieved from the IMAP server, expect a performance hit when setting this parameter.
+        -
+          name: body_type
+          in: query
+          require: false
+          type: string
+          description: Used when include_body is set to get only body parts of a given MIME-type (for example text/html) 
+        -
+          name: limit
+          in: query
+          require: false
+          type: integer
+          description: The maximum number of results to return. The maximum limit is 100.
+        -
+          name: offset
+          in: query
+          require: false
+          type: integer
+          description: Start the list at this offset (zero-based).
+      responses:
+        200:
+          description: Successful response
+          schema:
+            $ref: '#/definitions/ThreadInfo'
+  /accounts/{id}/sources:
+    get:
+      description: |
+        List of IMAP sources assigned for an account
+      parameters:
+        -
+          name: id
+          in: path
+          description: Unique id of an account accessible through your API key
+          required: true
+          type: string
+        -
+          name: status
+          in: query
+          description: "Only return sources whose status is of a specific value. Possible statuses are: INVALID_CREDENTIALS, CONNECTION_IMPOSSIBLE, NO_ACCESS_TO_ALL_MAIL, OK, TEMP_DISABLED and DISABLED"
+          required: false
+          type: string
+        -
+          name: status_ok
+          in: query
+          description: Set to 0 to get sources that are not working correctly. Set to 1 to get those that are.
+          required: false
+          type: integer
+      responses: #todo: this isn't documented, so we don't know what it is yet
+        200:
+          description: Successful response
+          schema:
+            $ref: "#/definitions/Result"
+    post:
+      description: |
+        Add a mailbox to a given account
+      parameters:
+        -
+          name: id
+          in: path
+          description: Unique id of an account accessible through your API key
+          required: true
+          type: string
+        -
+          name: email
+          in: query
+          description: The primary email address used to receive emails in this account
+          required: true
+          type: string
+        -
+          name: server
+          in: query
+          description: Name of IP of the IMAP server, eg. imap.gmail.com
+          required: true
+          type: string
+        -
+          name: username
+          in: query
+          description: The username used to authenticate an IMAP connection. On some servers, this is the same thing as the primary email address.
+          required: true
+          type: string
+        -
+          name: use_ssl	
+          in: query
+          description: Set to 1 if you want SSL encryption to be used when opening connections to the IMAP server. Any other value will be considered as do not use SSL
+          required: true
+          type: string
+        -
+          name: port
+          in: query
+          description: Port number to connect to on the server. Keep in mind that most IMAP servers will have one port for standard connection and another one for encrypted connection (see use-ssl parameter above) 
+          required: true
+          type: string
+        -
+          name: type
+          in: query
+          description: Currently, the only supported type is IMAP
+          required: true
+          type: string
+        -
+          name: origin_ip
+          in: query
+          description: IP address of the end user requesting the account to be created
+          required: false
+          type: string
+        -
+          name: expunge_on_deleted_flag
+          in: query
+          description: "By default, we don't filter out messages flagged as deleted. Set this parameter to 1 to turn on this filtering."
+          required: false
+          type: integer
+        -
+          name: sync_all_folders
+          in: query
+          description: "By default, we filter out some folders like 'Deleted Items' and 'Spam'. Set this parameter to 1 to turn off this filtering and show every single folder."
+          required: false
+          type: integer
+        -
+          name: raw_file_list
+          in: query
+          description: By default, we filter out files like signature images or those winmail.dat files form the files list. Set this parameter to 1 to turn off this filtering and show every single file attachments.
+          required: false
+          type: integer
+        -
+          name: password
+          in: query
+          description: Password for authentication on the IMAP server. Ignored if any of the provider_* parameters are set below.
+          required: false
+          type: string
+        -
+          name: provider_refresh_token
+          in: query
+          description: An OAuth2 refresh token obtained from the IMAP account provider to authenticate this email account.
+          required: false
+          type: string
+        -
+          name: provider_consumer_key
+          in: query
+          description: The OAuth2 Client ID used to obtain the the refresh token for the above account. That consumer key and secret must be configured in your Context.IO account, see oauth_providers
+          required: false
+          type: string
+        -
+          name: callback_url
+          in: query
+          description: "If specified, we'll make a POST request to this URL if the connection status of the source changes."
+          required: false
+          type: string
+        -
+          name: status_callback_url
+          in: query
+          description: "If specified, we'll make a POST request to this URL if the connection status of the source changes."
+          required: false
+          type: string
+      responses: #todo: this isn't documented, so we don't know what it is yet
+        200:
+          description: Successful response
+          schema:
+            $ref: "#/definitions/Result"
+  /accounts/{id}/sources/{label}:
+    get:
+      description: |
+        Parameters and status for an IMAP source.
+      parameters:
+        -
+          name: id
+          in: path
+          description: Unique id of an account accessible through your API key
+          required: true
+          type: string
+        -
+          name: label
+          in: path
+          description: The label property of the source instance. You can use 0 as an alias for the first source of an account.
+          required: true
+          type: string
+      responses: #todo: this isn't documented, so we don't know what it is yet
+        200:
+          description: Successful response
+          schema:
+            $ref: "#/definitions/Result"
+    post:
+      description: |
+        Modify a data source on a given account
+      parameters:
+        -
+          name: id
+          in: path
+          description: Unique id of an account accessible through your API key
+          required: true
+          type: string
+        -
+          name: label
+          in: path
+          description: The label property of the source instance. You can use 0 as an alias for the first source of an account.
+          required: true
+          type: string
+        -
+          name: status
+          in: query
+          description: If the status of the source is TEMP_DISABLED or DISABLED. You can do a POST/PUT with status set to 1 to reset it.
+          required: false
+          type: string
+        -
+          name: force_status_check
+          in: query
+          description: "Set to 1 to create an IMAP connection and reset the source status to to one reported by the IMAP backend. Don't combine this with other parameters."
+          required: false
+          type: integer
+        -
+          name: expunge_on_deleted_flag
+          in: query
+          description: "By default, we don't filter out messages flagged as deleted. Set this parameter to 1 to turn on this filtering."
+          required: false
+          type: integer
+        -
+          name: sync_all_folders
+          in: query
+          description: "By default, we filter out some folders like 'Deleted Items' and 'Spam'. Set this parameter to 1 to turn off this filtering and show every single folder."
+          required: false
+          type: integer
+        -
+          name: password
+          in: query
+          description: Password for authentication on the IMAP server. Ignored if any of the provider_* parameters are set below.
+          required: false
+          type: string
+        -
+          name: provider_refresh_token
+          in: query
+          description: An OAuth2 refresh token obtained from the IMAP account provider to authenticate this email account.
+          required: false
+          type: string
+        -
+          name: provider_consumer_key
+          in: query
+          description: The OAuth2 Client ID used to obtain the the refresh token for the above account. That consumer key and secret must be configured in your Context.IO account, see oauth_providers
+          required: false
+          type: string
+        -
+          name: status_callback_url
+          in: query
+          description: "If specified, we'll make a POST request to this URL if the connection status of the source changes."
+          required: false
+          type: string
+      responses: #todo: this isn't documented, so we don't know what it is yet
+        200:
+          description: Successful response
+          schema:
+            $ref: "#/definitions/Result"
+    delete:
+      description: |
+        Delete a data source of an account
+      parameters:
+        -
+          name: id
+          in: path
+          description: Unique id of an account accessible through your API key
+          required: true
+          type: string
+        -
+          name: label
+          in: path
+          description: The label property of the source instance. You can use 0 as an alias for the first source of an account.
+          required: true
+          type: string
+      responses: #todo: this isn't documented, so we don't know what it is yet
+        200:
+          description: Successful response
+          schema:
+            $ref: "#/definitions/Result"
+  /accounts/{id}/sources/{label}/folders:
+    get:
+      description: |
+        List folders in an IMAP source
+      parameters:
+        -
+          name: id
+          in: path
+          description: Unique id of an account accessible through your API key
+          required: true
+          type: string
+        -
+          name: label
+          in: path
+          description: The label property of the source instance. You can use 0 as an alias for the first source of an account.
+          required: true
+          type: string
+        -
+          name: include_extended_counts
+          in: query
+          description: Set to 1 to include extended counts in the result (for now, the only extended count supported is number of unseen messages). Since counts must be retrieved from the IMAP server, expect a performance hit when setting this parameter.
+          required: false
+          type: integer
+        -
+          name: no_cache
+          in: query
+          description: Set to 1 to fetch the folder list directly from the IMAP server. Since data must be retrieved from the IMAP server, expect a performance hit when setting this parameter.
+          required: false
+          type: integer
+      responses: 
+        200:
+          description: Successful response
+          schema:
+            title: ArrayOfBodyParts
+            type: array
+            items:
+              $ref: "#/definitions/FolderInfo"
+  /accounts/{id}/sources/{label}/folders/{folder}:
+    get:
+      description: |
+        Returns information about a given folder
+      parameters:
+        -
+          name: id
+          in: path
+          description: Unique id of an account accessible through your API key
+          required: true
+          type: string
+        -
+          name: label
+          in: path
+          description: The label property of the source instance. You can use 0 as an alias for the first source of an account.
+          required: true
+          type: string
+        -
+          name: folder
+          in: path
+          description: The full folder path using / as the path hierarchy delimiter.
+          required: true
+          type: string
+        -
+          name: delim
+          in: query
+          description: "If / isn't fancy enough as a hierarchy delimiter when specifying the folder you want to obtain, you're free to use what you want, just make sure you set this delim parameter to tell us what you're using."
+          required: false
+          type: integer
+        -
+          name: include_extended_counts
+          in: query
+          description: Set to 1 to include extended counts in the result (for now, the only extended count supported is number of unseen messages). Since counts must be retrieved from the IMAP server, expect a performance hit when setting this parameter.
+          required: false
+          type: integer
+      responses: 
+        200:
+          description: Successful response
+          schema:
+            $ref: "#/definitions/FolderInfo"
+    put:
+      description: |
+        Create a folder on an IMAP source
+      parameters:
+        -
+          name: id
+          in: path
+          description: Unique id of an account accessible through your API key
+          required: true
+          type: string
+        -
+          name: label
+          in: path
+          description: The label property of the source instance. You can use 0 as an alias for the first source of an account.
+          required: true
+          type: string
+        -
+          name: folder
+          in: path
+          description: The full folder path using / as the path hierarchy delimiter.
+          required: true
+          type: string
+        -
+          name: delim
+          in: query
+          description: "If / isn't fancy enough as a hierarchy delimiter when specifying the folder you want to obtain, you're free to use what you want, just make sure you set this delim parameter to tell us what you're using."
+          required: false
+          type: integer
+      responses: 
+        200:
+          description: Successful response
+          schema:
+            $ref: "#/definitions/Result"
+    delete:
+      description: |
+        Permanently removes a folder from the IMAP source
+      parameters:
+        -
+          name: id
+          in: path
+          description: Unique id of an account accessible through your API key
+          required: true
+          type: string
+        -
+          name: label
+          in: path
+          description: The label property of the source instance. You can use 0 as an alias for the first source of an account.
+          required: true
+          type: string
+        -
+          name: folder
+          in: path
+          description: The full folder path using / as the path hierarchy delimiter.
+          required: true
+          type: string
+      responses: 
+        200:
+          description: Successful response
+          schema:
+            $ref: "#/definitions/Result"
+  /accounts/{id}/sources/{label}/folders/{folder}/expunge:
+    post:
+      description: |
+        Runs an EXPUNGE command on the email server.
+      parameters:
+        -
+          name: id
+          in: path
+          description: Unique id of an account accessible through your API key
+          required: true
+          type: string
+        -
+          name: label
+          in: path
+          description: The label property of the source instance. You can use 0 as an alias for the first source of an account.
+          required: true
+          type: string
+        -
+          name: folder
+          in: path
+          description: The full folder path using / as the path hierarchy delimiter.
+          required: true
+          type: string
+      responses: 
+        200:
+          description: Successful response
+          schema:
+            $ref: "#/definitions/Result"
+  /accounts/{id}/sources/{label}/folders/{folder}/messages:
+    get:
+      description: |
+        Listings of email messages in a given folder
+      parameters:
+        -
+          name: id
+          in: path
+          description: Unique id of an account accessible through your API key
+          required: true
+          type: string
+        -
+          name: label
+          in: path
+          description: The label property of the source instance. You can use 0 as an alias for the first source of an account.
+          required: true
+          type: string
+        -
+          name: folder
+          in: path
+          description: The full folder path using / as the path hierarchy delimiter.
+          required: true
+          type: string
+        -
+          name: include_thread_size
+          in: query
+          require: false
+          type: integer 
+          description: Set to 1 to include thread size in the result.
+        -
+          name: include_body
+          in: query
+          require: false
+          type: integer 
+          description: Set to 1 to include message bodies in the result. Since message bodies must be retrieved from the IMAP server, expect a performance hit when setting this parameter.
+        -
+          name: body_type
+          in: query
+          require: false
+          type: string
+          description: Used when include_body is set to get only body parts of a given MIME-type (for example text/html) 
+        -
+          name: include_headers
+          in: query
+          require: false
+          type: integer 
+          description: Can be set to 0 (default), 1 or raw. If set to 1, complete message headers, parsed into an array, are included in the results. If set to raw, the headers are also included but as a raw unparsed string. Since full original headers bodies must be retrieved from the IMAP server, expect a performance hit when setting this parameter.
+        -
+          name: include_flags
+          in: query
+          require: false
+          type: integer 
+          description: Set to 1 to include IMAP flags of messages in the result. Since message flags must be retrieved from the IMAP server, expect a performance hit when setting this parameter.
+        -
+          name: flag_seen
+          in: query
+          require: false
+          type: integer 
+          description: Set to 1 to restrict list to messages having the \Seen flag set, set to 0 to have the messages with that flag unset (ie. list unread messages in the folder).
+        -
+          name: limit
+          in: query
+          require: false
+          type: integer
+          description: The maximum number of results to return. The maximum limit is 100.
+        -
+          name: offset
+          in: query
+          require: false
+          type: integer
+          description: Start the list at this offset (zero-based).
+      responses: 
+        200:
+          description: Successful response
+          schema:
+            title: ArrayOfMessages
+            type: array
+            items:
+              $ref: "#/definitions/MessageInfo"
+  /accounts/{id}/sources/{label}/sync:
+    get:
+      description: |
+        Sync status of a data source
+      parameters:
+        -
+          name: id
+          in: path
+          description: Unique id of an account accessible through your API key
+          required: true
+          type: string
+        -
+          name: label
+          in: path
+          description: The label property of the source instance. You can use 0 as an alias for the first source of an account.
+          required: true
+          type: string
+      responses: #todo: this isn't documented
+        200:
+          description: Successful response
+          schema:
+            $ref: "#/definitions/Result"
+    post:
+      description: |
+        Trigger a sync of a data source
+      parameters:
+        -
+          name: id
+          in: path
+          description: Unique id of an account accessible through your API key
+          required: true
+          type: string
+        -
+          name: label
+          in: path
+          description: The label property of the source instance. You can use 0 as an alias for the first source of an account.
+          required: true
+          type: string
+      responses: #todo: this isn't documented
+        200:
+          description: Successful response
+          schema:
+            $ref: "#/definitions/Result"
+  /accounts/{id}/sources/{label}/connect_tokens:
+    get:
+      description: |
+        List of connect tokens created for a source
+      parameters:
+        -
+          name: id
+          in: path
+          description: Unique id of an account accessible through your API key
+          required: true
+          type: string
+        -
+          name: label
+          in: path
+          description: The label property of the source instance. You can use 0 as an alias for the first source of an account.
+          required: true
+          type: string
+      responses: 
+        200:
+          description: Successful response
+          schema:
+            title: ArrayOfConnectTokens
+            type: array
+            items:
+              $ref: "#/definitions/ConnectToken"
+    post:
+      description: |
+        Obtain a new connect_token for a specific source
+      parameters:
+        -
+          name: id
+          in: path
+          description: Unique id of an account accessible through your API key
+          required: true
+          type: string
+        -
+          name: label
+          in: path
+          description: The label property of the source instance. You can use 0 as an alias for the first source of an account.
+          required: true
+          type: string
+        -
+          name: callback_url
+          in: query
+          description: "When the user's mailbox is connected to your API key, the browser will call this url (GET). This call will have a parameter called contextio_token indicating the connect_token related to this callback. You can then do a get on this connect_token to obtain details about the account and source created through that token and save that account id in your own user data."
+          required: true
+          type: string
+      responses: 
+        200:
+          description: Successful response
+          schema:
+            $ref: "#/definitions/NewConnectToken"
+  /accounts/{id}/sources/{label}/connect_tokens/token:
+    get:
+      description: |
+        Information about a given connect token
+      parameters:
+        -
+          name: id
+          in: path
+          description: Unique id of an account accessible through your API key
+          required: true
+          type: string
+        -
+          name: label
+          in: path
+          description: The label property of the source instance. You can use 0 as an alias for the first source of an account.
+          required: true
+          type: string
+        -
+          name: token
+          in: path
+          description: The unique random token used for the graphical account creation process
+          required: true
+          type: string
+      responses:
+        200:
+          description: Successful response
+          schema:
+            $ref: "#/definitions/ConnectToken"
+    delete:
+      description: |
+        Remove a given connect token
+      parameters:
+        -
+          name: id
+          in: path
+          description: Unique id of an account accessible through your API key
+          required: true
+          type: string
+        -
+          name: label
+          in: path
+          description: The label property of the source instance. You can use 0 as an alias for the first source of an account.
+          required: true
+          type: string
+        -
+          name: token
+          in: path
+          description: The unique random token used for the graphical account creation process
+          required: true
+          type: string
+      responses:
+        200:
+          description: Successful response
+          schema:
+            $ref: "#/definitions/Result"
+  /accounts/{id}/sync:
+    get:
+      description: |
+        Sync status for all sources of the account
+      parameters:
+        -
+          name: id
+          in: path
+          description: Unique id of an account accessible through your API key
+          required: true
+          type: string
+      responses: #todo: undocumented
+        200:
+          description: Successful response
+          schema:
+            $ref: "#/definitions/Result"
+    post:
+      description: |
+        Trigger a sync of all sources on the account
+      parameters:
+        -
+          name: id
+          in: path
+          description: Unique id of an account accessible through your API key
+          required: true
+          type: string
+      responses: #todo: undocumented
+        200:
+          description: Successful response
+          schema:
+            $ref: "#/definitions/Result"
+  /accounts/{id}/threads:
+    get:
+      description: |
+        List of threads on an account
+      parameters:
+        -
+          name: id
+          in: path
+          description: Unique id of an account accessible through your API key
+          required: true
+          type: string
+        -
+          name: subject
+          in: query
+          description: Get messages whose subject matches this search string. To use regular expressions instead of simple string matching, make sure the string starts and ends with /.
+          required: false
+          type: string
+        -
+          name: email
+          in: query
+          require: false
+          type: string
+          description: Email address of the contact for whom you want the latest files exchanged with. By "exchanged with contact X" we mean any email received from contact X, sent to contact X or sent by anyone to both contact X and the source owner.
+        -
+          name: to
+          in: query
+          require: false
+          type: string
+          description: Email address of a contact files have been sent to.
+        -
+          name: from
+          in: query
+          require: false
+          type: string
+          description: Email address of a contact files have been received from.
+        -
+          name: cc
+          in: query
+          require: false
+          type: string
+          description: Email address of a contact CC\'ed on the messages.
+        -
+          name: bcc
+          in: query
+          require: false
+          type: string
+          description: Email address of a contact BCC\'ed on the messages.
+        -
+          name: folder
+          in: query
+          description: Filter messages by the folder (or Gmail label). This parameter can be the complete folder name with the appropriate hierarchy delimiter for the mail server being queried (eg. Inbox/My folder) or the "symbolic name" of the folder (eg. \Starred). The symbolic name refers to attributes used to refer to special use folders in a language-independent way. See RFC-6154. 
+          required: false
+          type: string
+        -
+          name: active_before
+          in: query
+          require: false
+          type: integer 
+          description: "Get threads with at least one message dated before this timestamp. The value this filter is applied to is the Date: header of the message which refers to the time the message is sent from the origin."
+        -
+          name: active_after
+          in: query
+          require: false
+          type: integer 
+          description: "Get threads with at least one message dated after this timestamp. The value this filter is applied to is the Date: header of the message which refers to the time the message is sent from the origin."
+        -
+          name: started_before
+          in: query
+          require: false
+          type: integer 
+          description: "Get threads whose first message is dated before this timestamp. The value this filter is applied to is the Date: header of the message which refers to the time the message is sent from the origin."
+        -
+          name: started_after
+          in: query
+          require: false
+          type: integer 
+          description: "Get threads whose first message is dated after this timestamp. The value this filter is applied to is the Date: header of the message which refers to the time the message is sent from the origin."
+        -
+          name: indexed_before
+          in: query
+          require: false
+          type: integer 
+          description: Only include files attached to messages indexed before a given timestamp. This is not the same as the date of the email, it is the time Context.IO indexed this message.
+        -
+          name: indexed_after
+          in: query
+          require: false
+          type: integer 
+          description: Only include files attached to messages indexed after a given timestamp. This is not the same as the date of the email, it is the time Context.IO indexed this message.
+        -
+          name: limit
+          in: query
+          require: false
+          type: integer
+          description: The maximum number of results to return. The maximum limit is 100.
+        -
+          name: offset
+          in: query
+          require: false
+          type: integer
+          description: Start the list at this offset (zero-based).
+      responses:
+        200:
+          description: Successful response
+          schema:
+            title: ArrayOfURLs
+            type: array
+            items:
+              type: string
+              description: Complete URL of a thread this contact is in
+  /accounts/{id}/threads/{thread_id}:
+    get:
+      description: |
+        Returns files, contacts and messages on a given thread
+      parameters:
+        -
+          name: id
+          in: path
+          description: Unique id of an account accessible through your API key
+          required: true
+          type: string
+        -
+          name: thread_id
+          in: path
+          description: A gmail_thread_id prefixed with gm-
+          required: true
+          type: string
+        -
+          name: include_body
+          in: query
+          require: false
+          type: integer 
+          description: Set to 1 to include message bodies in the result. Since message bodies must be retrieved from the IMAP server, expect a performance hit when setting this parameter.
+        -
+          name: body_type
+          in: query
+          require: false
+          type: string
+          description: Used when include_body is set to get only body parts of a given MIME-type (for example text/html) 
+        -
+          name: include_headers
+          in: query
+          require: false
+          type: integer 
+          description: Can be set to 0 (default), 1 or raw. If set to 1, complete message headers, parsed into an array, are included in the results. If set to raw, the headers are also included but as a raw unparsed string. Since full original headers bodies must be retrieved from the IMAP server, expect a performance hit when setting this parameter.
+        -
+          name: include_flags
+          in: query
+          require: false
+          type: integer 
+          description: Set to 1 to include IMAP flags of messages in the result. Since message flags must be retrieved from the IMAP server, expect a performance hit when setting this parameter.
+        -
+          name: include_source
+          in: query
+          require: false
+          type: integer 
+          description: Set to 1 to include message sources in the result. Since message sources must be retrieved from the IMAP server, expect a performance hit when setting this parameter.
+        -
+          name: limit
+          in: query
+          require: false
+          type: integer
+          description: The maximum number of results to return. The maximum limit is 100.
+        -
+          name: offset
+          in: query
+          require: false
+          type: integer
+          description: Start the list at this offset (zero-based).
+      responses:
+        200:
+          description: Successful response
+          schema:
+            $ref: "#/definitions/ThreadInfo"
+    delete:
+      description: |
+        Delete a thread
+      parameters:
+        -
+          name: id
+          in: path
+          description: Unique id of an account accessible through your API key
+          required: true
+          type: string
+        -
+          name: thread_id
+          in: path
+          description: A gmail_thread_id prefixed with gm-
+          required: true
+          type: string
+      responses:
+        200:
+          description: Successful response
+          schema:
+            $ref: "#/definitions/Result"
+  /accounts/{id}/threads/{thread_id}/folders:
+    post:
+      description: |
+        Add/remove thread to/from a folder
+      parameters:
+        -
+          name: id
+          in: path
+          description: Unique id of an account accessible through your API key
+          required: true
+          type: string
+        -
+          name: thread_id
+          in: path
+          description: A gmail_thread_id prefixed with gm-
+          required: true
+          type: string
+        -
+          name: add
+          in: query
+          require: false
+          type: string
+          description: New folder this thread should appear in.
+        -
+          name: remove
+          in: query
+          require: false
+          type: string
+          description: Folder this thread should be removed from.
+      responses:
+        200:
+          description: Successful response
+          schema:
+            $ref: "#/definitions/Result"
+    put:
+      description: |
+        Sets folders that should be applied to this thread
+      parameters:
+        -
+          name: id
+          in: path
+          description: Unique id of an account accessible through your API key
+          required: true
+          type: string
+        -
+          name: thread_id
+          in: path
+          description: A gmail_thread_id prefixed with gm-
+          required: true
+          type: string
+        -
+          name: body
+          in: body
+          description: Sets the folders (or Gmail labels) that should be applied to this thread. Unlike the POST call which allows you to remove the thread from a given folder or add it to another without impacting other folders, this overwrites current folder assignation of the thread with what you set.
+          required: true
+          schema:
+            $ref: "#/definitions/FolderInfo"
+        -
+          name: remove
+          in: query
+          require: false
+          type: string
+          description: Folder this thread should be removed from.
+      responses:
+        200:
+          description: Successful response
+          schema:
+            $ref: "#/definitions/Result"
+# todo https://context.io/docs/2.0/accounts/webhooks
+# todo https://context.io/docs/2.0/connect_tokens
+  /discovery:
+    get:
+      description: |
+        Attempts to discover IMAP settings for a given email address
+      parameters:
+        -
+          name: email
+          in: query
+          description: An email address you want to discover IMAP settings for. Make sure source_type is set to IMAP.
+          required: true
+          type: string
+        -
+          name: source_type
+          in: query
+          description: The type of source you want to discover settings for. Right now, the only supported source type is IMAP
+          required: true
+          type: string
+      responses:
+        200:
+          description: Successful response
+          schema:
+            $ref: '#/definitions/IMAPSettings'
+  /oauth_providers:
+    get:
+      description: |
+        List of OAuth providers configured
+      responses: #todo undocumented
+        200:
+          description: Successful response
+          schema:
+            $ref: '#/definitions/IMAPSettings'
+    post:
+      description: |
+        Add a new OAuth2 provider
+      parameters:
+        -
+          name: type
+          in: query
+          description: Identification of the OAuth2 provider. Possible values are GMAIL_OAUTH2 and MSLIVECONNECT.
+          required: true
+          type: string
+        -
+          name: provider_consumer_key
+          in: query
+          description: The OAuth2 Client ID
+          required: true
+          type: string
+        -
+          name: provider_consumer_secret
+          in: query
+          description: The OAuth2 Client Secret
+          required: true
+          type: string
+      responses: #todo undocumented
+        200:
+          description: Successful response
+          schema:
+            $ref: '#/definitions/Result'
+  /oauth_providers/{key}:
+    get:
+      description: |
+        Information about a given OAuth provider
+      parameters:
+        -
+          name: key
+          in: path
+          description: The consumer key for this external OAuth provider
+          required: true
+          type: string
+      responses: #todo undocumented
+        200:
+          description: Successful response
+          schema:
+            $ref: '#/definitions/Result'
+    delete:
+      description: |
+        Remove a given OAuth provider
+      parameters:
+        -
+          name: key
+          in: path
+          description: The consumer key for this external OAuth provider
+          required: true
+          type: string
+      responses: #todo undocumented
+        200:
+          description: Successful response
+          schema:
+            $ref: '#/definitions/Result'
+# todo https://context.io/docs/2.0/webhooks
+definitions:
+  Account:
+    properties:
+      id:
+        type: string
+        description: Id of the account
+      username:
+        type: string
+        description: Username assigned to the account
+      created:
+       type: number
+       description: Unix timestamp of account creation time 
+      suspended:
+        type: number
+        description: Unix timestamp of account suspension time 0 means not suspended
+      email_addresses:
+        type: array
+        items: 
+          type: string
+          description: Array of email addresses for this account
+      first_name:
+        type: string
+        description: First name of account holder
+      last_name:
+        type: string
+        description: Last name of account holder
+      password_expired:
+        type: number
+        description: Unix timestamp of user\'s password expiration. 0 means still valid
+      sources:
+        type: array
+        items:
+          type: string
+          description: List of email accounts where this account gets data from. See sources for details
+      resource_url:
+        type: string
+        description: URI which identifies this account
+      nb_messages:
+        type: number
+        description: Total number of messages in all sources of this account
+  NewAccount:
+    properties:
+      success:
+        type: boolean
+        description: true if account has been created (HTTP status 201), false on error,
+      id:
+        type: string
+        description: Id of the account that has been created
+      resource_url:
+        type: string
+        description: Full URI of resource created
+      source:
+        $ref: "#/definitions/Source"
+      access_token:
+        type: string
+        description: OAuth access token to sign all future requests on this newly created account
+      access_token_secret:
+        type: string
+        description: OAuth access token secret to sign all future requests on this newly created account
+  Source:
+    properties:
+      label:
+        type: string
+        description: Label of the source that has been created
+      resource_url:
+        type: string
+        description: Full URI of the source created for the account
+  Result:
+    properties:
+      success:
+        type: boolean
+        description: true on method success (HTTP status 200), false on error
+  ResultWithConnectionLog:
+    properties:
+      success:
+        type: boolean
+        description: true on method success (HTTP status 200), false on error
+      connection_log:
+        type: string
+        description: If the call failed, This will contain error messages from IMAP server
+  ResultWithFlags:
+    properties:
+      success:
+        type: boolean
+        description: true on method success (HTTP status 200), false on error
+      flags:
+        $ref = "#/definitions/Flags"
+  IMAPSettings:
+    properties:
+      email:
+        type: string
+        description: The email address requested for discovery,
+      found:
+        type: boolean
+        descripion: true if settings were found, false otherwise,
+      type:
+        type: string
+        description: Type of provider, (eg. "gmail"),
+      documentation:
+        type: array
+        items:
+          type: string
+        description: List of documentation pages that may be useful for end-users for this specific IMAP provider
+      imap: 
+        $ref: "#/definitions/IMAP"
+  IMAP:
+    properties:
+      server:
+        type: string
+        description: FQDN of the IMAP server
+      username:
+        type: string
+        description: What the username should be for authentication
+      port:
+        type: number 
+        description: Network port IMAP server is listening on 
+      use_ssl:
+        type: boolean
+        description: Whether that server:port uses SSL encrypted connections
+      oauth:
+        type: boolean 
+        description: true if the IMAP server support authentication through OAuth2 (setting related OAuth2 consumers)
+  ConnectToken:
+    properties:
+      token:
+        type: string
+        description: Id of the connect_token
+      email:
+        type: string
+        description: email address specified on token creation
+      created:
+        type: number
+        description: Unix timestamp of the connect_token was created
+      used:
+        type: number
+        description: Unix timestamp of when this token was used. 0 means it no account has been created with this token yet
+      expires:
+        type: string
+        description: Unix timestamp of when this token will expire and be purged. Once the token is used, this property will be set to false
+      callback_url:
+        type: string
+        description: URL of your app we\'ll redirect the browser to when the account is created
+      first_name:
+        type: string
+        description: First name specified on token creation
+      last_name:
+        type: string
+        description: Last name specified on token creation
+      account:
+        $ref: "#/definitions/Account"
+  NewConnectToken:
+    properties:
+      success:
+        type: boolean
+        description: true if connect_token was successfully created, false otherwise
+      token:
+        type: string
+        description: Id of the token
+      resource_url:
+        type: string
+        description: URL to of the token
+      browser_redirect_url:
+        type: string
+        description: Redirect the user\'s browser to this URL to have them connect their mailbox through this token        
+  Contact:
+    properties:
+      count:
+        type: number
+        description: number of messages that include this contact
+      sent_count:
+        type: number
+        description: number of messages that include the contact in To, CC, or BCC
+      received_count:
+        type: number
+        description: number of messages that include the contact in From
+      sent_from_account_count:
+        type: number
+        description: number of messages that include the contact in To, CC, or BCC and an email from this account in From
+      name:
+        type: string
+        description: Full name of contact
+      thumbnail:
+        type: string
+        description: URL pointing to Gravatar image associated to contact\'s email address, if applicable
+      last_received:
+        type: number
+        description: Unix timestamp of date the last message was received
+      last_sent:
+        type: number
+        description: Unix timestamp of date the last message was sent
+      emails:
+        type: array
+        items:
+          type: string
+        description: Array of email addresses for this contact
+  ContactQuery:
+    properties:
+      limit:
+        type: number
+        description: Maximum number of results returned
+      offset:
+        type: number
+        description: Offset requested in query (zero based)
+      active_after:
+        type: number
+        description: Results include contacts in at least one email dated after a given time
+      active_before:
+        type: number
+        description: Results include contacts in at least one email dated before a given time
+      search:
+        type: string
+        description: Results included contacts whose name of address match this search term
+  ContactList:
+    properties:
+      query:
+        $ref: "#/definitions/ContactQuery"
+      matches:
+        type: array
+        items:
+          $ref: "#/definitions/Contact"
+  FileInfo:
+    properties:
+      size:
+        type: number
+        description: Size of file in bytes.
+      type:
+        type: string
+        description: MIME type as specified in message source
+      subject:
+        type: string
+        description: Subject line of message this file is attached to
+      date:
+        type: number
+        description: Unix timestamp of the message
+      date_indexed:
+        type: number
+        description: Time this message was first seen by Context.IO (Unix timestamp)
+      addresses:
+        $ref: "#/definitions/Addresses"
+        description: Email addresses and names of sender and recipients (more details)
+# TODO https://context.io/docs/2.0/messagepersoninfo
+#      person_info:
+#        type: object
+#        description: Additional info about contacts on the message (more details)
+      file_name:
+        type: string
+        description: Name of file
+# arra of arrays https://context.io/docs/2.0/filenamestructure
+      file_name_structure:
+        type: array
+        items:
+          type: array
+          items:
+            type: string
+        description: Name of the file broken down in semantic parts (more details)
+      body_section:
+        type: string
+        description: MIME section this file can be found in (useful only if you\'re parsing raw source)
+      file_id:
+        type: string
+        description: Unique and persistent id for this file
+      supports_preview:
+        type: boolean
+        description: whether or not the file supports our preview function
+      is_embedded:
+        type: boolean
+        description: Indicates whether this file is an object embedded in the message or not
+      content_disposition:
+        type: string
+        description: Value of the Content-Disposition header of the MIME part containing this file, if specified. Typically \'inline\' or \'attachment\'
+      content_id:
+        type: string
+        description: If this file is an embedded object, this is the value of the Content-Id header of the MIME part containing this file
+      message_id:
+        type: string
+        description: Context.IO id of the message this file is attached to
+      email_message_id:
+        type: string
+        description: Value of RFC-822 Message-ID header this file is attached to
+      gmail_message_id:
+        type: string
+        description: Gmail message id the file is attached to (only present if source is a Gmail account)
+      gmail_thread_id:
+        type: string
+        description: Gmail thread id the file is attached to (only present if source is a Gmail account)
+  Address:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+  Addresses:
+    properties:
+      from:
+        $ref: "#/definitions/Address"
+      to:
+        type: array
+        items:
+          $ref: "#/definitions/Address"
+      cc:
+        type: array
+        items:
+          $ref: "#/definitions/Address"
+  MessageInfo:
+    properties:
+      email_message_id:
+        type: string
+        description: Value of RFC-822 Message-ID header
+      addresses:
+        $ref: "#/definitions/Addresses"
+        description: Email addresses and names of sender and recipients (more details)
+      person_info:
+        $ref: "#/definitions/PersonInfo"
+        description: Additional info about contacts on the message (more details)
+      message_id:
+        type: string
+        description: Context.IO id of the message this file is attached to
+      gmail_message_id:
+        type: string
+        description: Gmail message id the file is attached to (only present if source is a Gmail account)
+      gmail_thread_id:
+        type: string
+        description: Gmail thread id the file is attached to (only present if source is a Gmail account)
+      subject:
+        type: string
+        description: Subject line of message this file is attached to
+      date:
+        type: number
+        description: Unix timestamp of the message
+      date_indexed:
+        type: number
+        description: Time this message was first seen by Context.IO (Unix timestamp)
+      folders:
+        type: array
+        items:
+          type: string
+        description: List of folders (or Gmail labels) this message is found in
+      sources:
+        type: array
+        items:
+          $ref: "#/definitions/Source"
+      files:
+        type: array
+        items:
+          $ref: "#/definitions/FileInfo"
+  EmailAlias:
+    properties:
+      email:
+        type: string
+        description: Email address associated to an account
+      validated:
+        type: number
+        description: Unix timestamp of email address validation time,
+      primary:
+        type: integer
+        description: "Whether or not this address is the primary one asssociated to the account: 1 for yes, 0 for no"
+  NewEmailAlias:        
+    properties:
+      success:
+        type: boolean 
+        description: whether or not the email address was succesfully added
+      email_address:
+        type: string
+        description: email address added to the account
+      resource_url:
+        type: string
+        description: Complete URL of the resource created
+  BodyPart:
+    properties:
+      type:
+        type: string
+        description: MIME type of message part being fetched
+      charset:
+        type: string
+        description: encoding of the characters in the part of message
+      content:
+        type: string
+        description: the actual content of the message part being pulled
+      body_section:
+        type: string
+        description: indicating position of the part in the body structure
+  Flags:
+    properties:
+      seen:
+        type: boolean
+        description: whether or not a message has been viewed
+      answered:
+        type: boolean
+        description: whether or not a message has been replied to
+      flagged:
+        type: boolean
+        description: whether or not a message has been flagged
+      deleted:
+        type: boolean
+        description: whether or not a message has been deleted
+      draft:
+        type: boolean
+        description: whether or not a message is in draft mode
+  FolderInfo:
+    properties:
+      name:
+        type: string
+        description: Name of the folder
+      symbolic_name:
+        type: string
+        description: Special-use attribute of this folder (if and only if the server supports it and applicable to this folder)
+      attributes:
+        $ref: "#/definitions/Attributes"
+        description: IMAP Attributes of the folder given as a hash
+      delim:
+        type: string
+        description: Character used to delimit hierarchy in the folder name
+      nb_messages:
+        type: integer
+        description: Number of messages found in this folder
+      nb_unseen_messages:
+        type: integer
+        description: Number of unread messages in this folder (present only if include_extended_counts is set to 1)
+  Attributes:
+    additionalProperties:
+      type: string
+  PersonInfo:
+    additionalProperties:
+      $ref: "#/definitions/ThumbnailUrl"
+  ThumbnailUrl:
+    properties:
+      thumbnail:
+        type: string
+        description: thumbnail URL
+  ThreadInfo:
+    properties:
+      gmail_thread_id:
+        type: string
+        description: Thread id assigned by Gmail (only present if source is a Gmail account)
+      email_message_ids:
+        type: array
+        items:
+          type: string
+        description: List of email_message_ids forming the thread
+      person_info:
+        $ref: "#/definitions/PersonInfo"
+      messages:
+        type: array
+        items:
+          $ref: "#/definitions/MessageInfo"
