@@ -471,7 +471,7 @@ paths:
             title: ArrayOfThread
             type: array
             items:
-              $ref: "#/definitions/EmailAlias"
+              $ref: '#/definitions/EmailAlias'
     post:
       description: |
         Adding a new email addresses as an alias for an account
@@ -492,7 +492,7 @@ paths:
         200:
           description: Successful response
           schema:
-            $ref: "#/definitions/NewEmailAlias"
+            $ref: '#/definitions/NewEmailAlias'
   /accounts/{id}/email_addresses/{email}:
     post:
       description: |
@@ -520,7 +520,7 @@ paths:
         200:
           description: Successful response
           schema:
-            $ref: "#/definitions/Result"
+            $ref: '#/definitions/Result'
     delete:
       description: |
         Removing an email addresses form the aliases of an account
@@ -541,7 +541,7 @@ paths:
         200:
           description: Successful response
           schema:
-            $ref: "#/definitions/Result"
+            $ref: '#/definitions/Result'
   /accounts/{id}/files:
     get:
       description: |
@@ -656,7 +656,7 @@ paths:
             title: ArrayOfFiles
             type: array
             items:
-              $ref: "#/definitions/FileInfo"
+              $ref: '#/definitions/FileInfo'
   /accounts/{id}/files/{file_id}:
     get:
       description: |
@@ -678,7 +678,7 @@ paths:
         200:
           description: Successful response
           schema:
-            $ref: "#/definitions/FileInfo"
+            $ref: '#/definitions/FileInfo'
   /accounts/{id}/files/{file_id}/content:
     get:
       description: |
@@ -731,7 +731,7 @@ paths:
             title: ArrayOfFiles
             type: array
             items:
-              $ref: "#/definitions/FileInfo"
+              $ref: '#/definitions/FileInfo'
   /accounts/{id}/messages:
     get:
       description: |
@@ -894,7 +894,7 @@ paths:
             title: ArrayOfFiles
             type: array
             items:
-              $ref: "#/definitions/MessageInfo"
+              $ref: '#/definitions/MessageInfo'
     post:
       description: |
         Add a message in a given folder
@@ -959,7 +959,7 @@ paths:
         200:
           description: Successful response
           schema:
-            $ref: "#/definitions/Result"
+            $ref: '#/definitions/Result'
   /accounts/{id}/messages/{message_id}:
     get:
       description: |
@@ -1017,7 +1017,7 @@ paths:
         200:
           description: Successful response
           schema:
-            $ref: "#/definitions/MessageInfo"
+            $ref: '#/definitions/MessageInfo'
     post:
       description: |
         Copy or move a message
@@ -1086,7 +1086,7 @@ paths:
         200:
           description: Successful response
           schema:
-            $ref: "#/definitions/ResultWithConnectionLog"
+            $ref: '#/definitions/ResultWithConnectionLog'
     delete:
       description: |
         Copy or move a message
@@ -1107,7 +1107,7 @@ paths:
         200:
           description: Successful response
           schema:
-            $ref: "#/definitions/ResultWithConnectionLog"
+            $ref: '#/definitions/ResultWithConnectionLog'
   /accounts/{id}/messages/{message_id}/body:
     get:
       description: |
@@ -1138,7 +1138,7 @@ paths:
             title: ArrayOfBodyParts
             type: array
             items:
-              $ref: "#/definitions/BodyPart"
+              $ref: '#/definitions/BodyPart'
   /accounts/{id}/messages/{message_id}/flags:
     get:
       description: |
@@ -1160,7 +1160,7 @@ paths:
         200:
           description: Successful response
           schema:
-            $ref: "#/definitions/Flags"
+            $ref: '#/definitions/Flags'
     post:
       description: |
         Set message flags for a given email
@@ -1211,7 +1211,7 @@ paths:
         200:
           description: Successful response
           schema:
-            $ref: "#/definitions/ResultWithFlags"
+            $ref: '#/definitions/ResultWithFlags'
   /accounts/{id}/messages/{message_id}/folders:
     get:
       description: |
@@ -1236,7 +1236,7 @@ paths:
             title: ArrayOfBodyParts
             type: array
             items:
-              $ref: "#/definitions/FolderInfo"
+              $ref: '#/definitions/FolderInfo'
     post:
       description: |
         Edit folders a message should appear in
@@ -1269,7 +1269,7 @@ paths:
         200:
           description: Successful response
           schema:
-            $ref: "#/definitions/Result"
+            $ref: '#/definitions/Result'
     put:
       description: |
         Set folders a message should appear in
@@ -1292,12 +1292,12 @@ paths:
           description: The format of the request body follows the format of the GET response above with the exception that you only need to specify either the name or symbolic_name property for each folder the message must appear in.
           required: true
           schema:
-            $ref: "#/definitions/FolderInfo"
+            $ref: '#/definitions/FolderInfo'
       responses:
         200:
           description: Successful response
           schema:
-            $ref: "#/definitions/Result"
+            $ref: '#/definitions/Result'
   /accounts/{id}/messages/{message_id}/headers:
     get:
       description: |
@@ -1328,7 +1328,7 @@ paths:
             title: ArrayOfBodyParts
             type: array
             items:
-              $ref: "#/definitions/Attributes"
+              $ref: '#/definitions/Attributes'
   /accounts/{id}/messages/{message_id}/source:
     get:
       description: |
@@ -1438,7 +1438,7 @@ paths:
         200:
           description: Successful response
           schema:
-            $ref: "#/definitions/Result"
+            $ref: '#/definitions/Result'
     post:
       description: |
         Add a mailbox to a given account
@@ -1543,7 +1543,7 @@ paths:
         200:
           description: Successful response
           schema:
-            $ref: "#/definitions/Result"
+            $ref: '#/definitions/Result'
   /accounts/{id}/sources/{label}:
     get:
       description: |
@@ -1565,7 +1565,7 @@ paths:
         200:
           description: Successful response
           schema:
-            $ref: "#/definitions/Result"
+            $ref: '#/definitions/Result'
     post:
       description: |
         Modify a data source on a given account
@@ -1634,7 +1634,7 @@ paths:
         200:
           description: Successful response
           schema:
-            $ref: "#/definitions/Result"
+            $ref: '#/definitions/Result'
     delete:
       description: |
         Delete a data source of an account
@@ -1655,7 +1655,7 @@ paths:
         200:
           description: Successful response
           schema:
-            $ref: "#/definitions/Result"
+            $ref: '#/definitions/Result'
   /accounts/{id}/sources/{label}/folders:
     get:
       description: |
@@ -1692,7 +1692,7 @@ paths:
             title: ArrayOfBodyParts
             type: array
             items:
-              $ref: "#/definitions/FolderInfo"
+              $ref: '#/definitions/FolderInfo'
   /accounts/{id}/sources/{label}/folders/{folder}:
     get:
       description: |
@@ -1732,7 +1732,7 @@ paths:
         200:
           description: Successful response
           schema:
-            $ref: "#/definitions/FolderInfo"
+            $ref: '#/definitions/FolderInfo'
     put:
       description: |
         Create a folder on an IMAP source
@@ -1765,7 +1765,7 @@ paths:
         200:
           description: Successful response
           schema:
-            $ref: "#/definitions/Result"
+            $ref: '#/definitions/Result'
     delete:
       description: |
         Permanently removes a folder from the IMAP source
@@ -1792,7 +1792,7 @@ paths:
         200:
           description: Successful response
           schema:
-            $ref: "#/definitions/Result"
+            $ref: '#/definitions/Result'
   /accounts/{id}/sources/{label}/folders/{folder}/expunge:
     post:
       description: |
@@ -1820,7 +1820,7 @@ paths:
         200:
           description: Successful response
           schema:
-            $ref: "#/definitions/Result"
+            $ref: '#/definitions/Result'
   /accounts/{id}/sources/{label}/folders/{folder}/messages:
     get:
       description: |
@@ -1899,7 +1899,7 @@ paths:
             title: ArrayOfMessages
             type: array
             items:
-              $ref: "#/definitions/MessageInfo"
+              $ref: '#/definitions/MessageInfo'
   /accounts/{id}/sources/{label}/sync:
     get:
       description: |
@@ -1921,7 +1921,7 @@ paths:
         200:
           description: Successful response
           schema:
-            $ref: "#/definitions/Result"
+            $ref: '#/definitions/Result'
     post:
       description: |
         Trigger a sync of a data source
@@ -1942,7 +1942,7 @@ paths:
         200:
           description: Successful response
           schema:
-            $ref: "#/definitions/Result"
+            $ref: '#/definitions/Result'
   /accounts/{id}/sources/{label}/connect_tokens:
     get:
       description: |
@@ -1967,7 +1967,7 @@ paths:
             title: ArrayOfConnectTokens
             type: array
             items:
-              $ref: "#/definitions/ConnectToken"
+              $ref: '#/definitions/ConnectToken'
     post:
       description: |
         Obtain a new connect_token for a specific source
@@ -1994,7 +1994,7 @@ paths:
         200:
           description: Successful response
           schema:
-            $ref: "#/definitions/NewConnectToken"
+            $ref: '#/definitions/NewConnectToken'
   /accounts/{id}/sources/{label}/connect_tokens/token:
     get:
       description: |
@@ -2022,7 +2022,7 @@ paths:
         200:
           description: Successful response
           schema:
-            $ref: "#/definitions/ConnectToken"
+            $ref: '#/definitions/ConnectToken'
     delete:
       description: |
         Remove a given connect token
@@ -2049,7 +2049,7 @@ paths:
         200:
           description: Successful response
           schema:
-            $ref: "#/definitions/Result"
+            $ref: '#/definitions/Result'
   /accounts/{id}/sync:
     get:
       description: |
@@ -2065,7 +2065,7 @@ paths:
         200:
           description: Successful response
           schema:
-            $ref: "#/definitions/Result"
+            $ref: '#/definitions/Result'
     post:
       description: |
         Trigger a sync of all sources on the account
@@ -2080,7 +2080,7 @@ paths:
         200:
           description: Successful response
           schema:
-            $ref: "#/definitions/Result"
+            $ref: '#/definitions/Result'
   /accounts/{id}/threads:
     get:
       description: |
@@ -2254,7 +2254,7 @@ paths:
         200:
           description: Successful response
           schema:
-            $ref: "#/definitions/ThreadInfo"
+            $ref: '#/definitions/ThreadInfo'
     delete:
       description: |
         Delete a thread
@@ -2275,7 +2275,7 @@ paths:
         200:
           description: Successful response
           schema:
-            $ref: "#/definitions/Result"
+            $ref: '#/definitions/Result'
   /accounts/{id}/threads/{thread_id}/folders:
     post:
       description: |
@@ -2309,7 +2309,7 @@ paths:
         200:
           description: Successful response
           schema:
-            $ref: "#/definitions/Result"
+            $ref: '#/definitions/Result'
     put:
       description: |
         Sets folders that should be applied to this thread
@@ -2332,7 +2332,7 @@ paths:
           description: Sets the folders (or Gmail labels) that should be applied to this thread. Unlike the POST call which allows you to remove the thread from a given folder or add it to another without impacting other folders, this overwrites current folder assignation of the thread with what you set.
           required: true
           schema:
-            $ref: "#/definitions/FolderInfo"
+            $ref: '#/definitions/FolderInfo'
         -
           name: remove
           in: query
@@ -2343,9 +2343,397 @@ paths:
         200:
           description: Successful response
           schema:
-            $ref: "#/definitions/Result"
-# todo https://context.io/docs/2.0/accounts/webhooks
-# todo https://context.io/docs/2.0/connect_tokens
+            $ref: '#/definitions/Result'
+  /accounts/{id}/webhooks:
+    get:
+      description: |
+        Listing of WebHook configured for an account
+      parameters:
+        -
+          name: id
+          in: path
+          description: Unique id of an account accessible through your API key
+          required: true
+          type: string
+      responses:
+        200:
+          description: Successful response
+          schema:
+            title: ArrayOfWebhooks
+            type: array
+            items:
+              $ref: '#/definitions/Webhook'
+    post:
+      description: |
+        Create a new WebHook on an account
+      parameters:
+        -
+          name: id
+          in: path
+          description: Unique id of an account accessible through your API key
+          required: true
+          type: string
+        -
+          name: callback_url
+          in: query
+          description: A valid URL Context.IO calls when a matching message is found. The callback URL is called with an HTTP POST with message information in request body, see receiving webhook callbacks.
+          required: true
+          type: string
+        -
+          name: failure_notif_url
+          in: query
+          description: "A valid URL Context.IO calls if the WebHooks fails and will no longer be active. That may happen if, for example, the server becomes unreachable or if it closes an IDLE connection and we can't re-establish it. The callback URL is called with an HTTP POST with more information in request body, see receiving failure notifications."
+          required: true
+          type: string
+        -
+          name: filter_to
+          in: query
+          description: Check for new messages sent to a given name or email address. Also accepts a comma delimited list of email addresses.
+          required: false
+          type: string
+        -
+          name: filter_from
+          in: query
+          description: Check for new messages received from a given name or email address. Also accepts a comma delimited list of email addresses.
+          required: false
+          type: string
+        -
+          name: filter_cc
+          in: query
+          description: "Check for new messages where a given name or email address is cc'ed. Also accepts a comma delimited list of email addresses."
+          required: false
+          type: string
+        -
+          name: filter_subject
+          in: query
+          description: Check for new messages with a subject matching a given string or regular expresion
+          required: false
+          type: string
+        -
+          name: filter_thread
+          in: query
+          description: Check for new messages in a given thread. Value can be a gmail_thread_id or the email_message_id of an existing message currently in the thread.
+          required: false
+          type: string
+        -
+          name: filter_file_name
+          in: query
+          description: Check for new messages where a file whose name matches the given string is attached. Supports wildcards and regular expressions like the file_name parameter of the files list call.
+          required: false
+          type: string
+        -
+          name: filter_folder_added
+          in: query
+          description: Check for messages filed in a given folder. On Gmail, this is equivalent to having a label applied to a message. The value should be the complete name (including parents if applicable) of the folder you want to track.
+          required: false
+          type: string
+        -
+          name: filter_folder_removed
+          in: query
+          description: Check for messages removed from a given folder. On Gmail, this is equivalent to having a label removed from a message. The value should be the complete name (including parents if applicable) of the folder you want to track.
+          required: false
+          type: string
+        -
+          name: filter_to_domain
+          in: query
+          description: Check for new messages sent to a given domain. Also accepts a comma delimited list of domains.
+          required: false
+          type: string
+        -
+          name: filter_from_domain
+          in: query
+          description: Check for new messages sent from a given domain. Also accepts a comma delimited list of domains.
+          required: false
+          type: string
+        -
+          name: include_body
+          in: query
+          require: false
+          type: integer 
+          description: Set to 1 to include message bodies in the result.
+        -
+          name: body_type
+          in: query
+          require: false
+          type: string
+          description: Used when include_body is set to get only body parts of a given MIME-type (for example text/html) 
+        -
+          name: include_header
+          in: query
+          require: false
+          type: integer 
+          description: Set to 1 or raw to include message headers in the result.
+      responses:
+        200:
+          description: Successful response
+          schema:
+            $ref: '#/definitions/NewWebhook'
+  /accounts/{id}/webhooks/{webhook_id}:
+    get:
+      description: |
+        Properties of a given WebHook
+      parameters:
+        -
+          name: id
+          in: path
+          description: Unique id of an account accessible through your API key
+          required: true
+          type: string
+        -
+          name: webhook_id
+          in: path
+          description: Unique id of the webhook instance.
+          required: true
+          type: string
+      responses:
+        200:
+          description: Successful response
+          schema:
+            $ref: '#/definitions/Webhook'
+    post:
+      description: |
+        Change properties of a given WebHook
+      parameters:
+        -
+          name: id
+          in: path
+          description: Unique id of an account accessible through your API key
+          required: true
+          type: string
+        -
+          name: webhook_id
+          in: path
+          description: Unique id of the webhook instance.
+          required: true
+          type: string
+        -
+          name: callback_url
+          in: query
+          description: A valid URL Context.IO calls when a matching message is found. The callback URL is called with an HTTP POST with message information in request body, see receiving webhook callbacks.
+          required: true
+          type: string
+        -
+          name: failure_notif_url
+          in: query
+          description: "A valid URL Context.IO calls if the WebHooks fails and will no longer be active. That may happen if, for example, the server becomes unreachable or if it closes an IDLE connection and we can't re-establish it. The callback URL is called with an HTTP POST with more information in request body, see receiving failure notifications."
+          required: true
+          type: string
+        -
+          name: active
+          in: query
+          description: The active property of a WebHook allows you to pause (set to 0) or resume (set to 1) it.
+          required: false
+          type: integer
+        -
+          name: filter_to
+          in: query
+          description: Check for new messages sent to a given name or email address. Also accepts a comma delimited list of email addresses.
+          required: false
+          type: string
+        -
+          name: filter_from
+          in: query
+          description: Check for new messages received from a given name or email address. Also accepts a comma delimited list of email addresses.
+          required: false
+          type: string
+        -
+          name: filter_cc
+          in: query
+          description: "Check for new messages where a given name or email address is cc'ed. Also accepts a comma delimited list of email addresses."
+          required: false
+          type: string
+        -
+          name: filter_subject
+          in: query
+          description: Check for new messages with a subject matching a given string or regular expresion
+          required: false
+          type: string
+        -
+          name: filter_thread
+          in: query
+          description: Check for new messages in a given thread. Value can be a gmail_thread_id or the email_message_id of an existing message currently in the thread.
+          required: false
+          type: string
+        -
+          name: filter_file_name
+          in: query
+          description: Check for new messages where a file whose name matches the given string is attached. Supports wildcards and regular expressions like the file_name parameter of the files list call.
+          required: false
+          type: string
+        -
+          name: filter_folder_added
+          in: query
+          description: Check for messages filed in a given folder. On Gmail, this is equivalent to having a label applied to a message. The value should be the complete name (including parents if applicable) of the folder you want to track.
+          required: false
+          type: string
+        -
+          name: filter_folder_removed
+          in: query
+          description: Check for messages removed from a given folder. On Gmail, this is equivalent to having a label removed from a message. The value should be the complete name (including parents if applicable) of the folder you want to track.
+          required: false
+          type: string
+        -
+          name: filter_to_domain
+          in: query
+          description: Check for new messages sent to a given domain. Also accepts a comma delimited list of domains.
+          required: false
+          type: string
+        -
+          name: filter_from_domain
+          in: query
+          description: Check for new messages sent from a given domain. Also accepts a comma delimited list of domains.
+          required: false
+          type: string
+        -
+          name: include_body
+          in: query
+          require: false
+          type: integer 
+          description: Set to 1 to include message bodies in the result.
+        -
+          name: body_type
+          in: query
+          require: false
+          type: string
+          description: Used when include_body is set to get only body parts of a given MIME-type (for example text/html) 
+        -
+          name: include_header
+          in: query
+          require: false
+          type: integer 
+          description: Set to 1 or raw to include message headers in the result.
+      responses:
+        200:
+          description: Successful response
+          schema:
+            $ref: '#/definitions/ResultWithFeedbackCode'
+    delete:
+      description: |
+        Cancel a WebHook
+      parameters:
+        -
+          name: id
+          in: path
+          description: Unique id of an account accessible through your API key
+          required: true
+          type: string
+        -
+          name: webhook_id
+          in: path
+          description: Unique id of the webhook instance.
+          required: true
+          type: string
+      responses:
+        200: #todo undocumented
+          description: Successful response
+          schema:
+            $ref: '#/definitions/Result'
+  /connect_tokens:
+    get:
+      description: |
+        List of connect tokens created with your API key
+      responses:
+        200:
+          description: Successful response
+          schema:
+            title: ArrayOfConnectTokens
+            type: array
+            items:
+              $ref: '#/definitions/ConnectToken'
+    post:
+      description: |
+        Obtain a new connect_token
+      parameters:
+        -
+          name: callback_url
+          in: query
+          description: When the user\'s mailbox is connected to your API key, the browser will call this url (GET). This call will have a parameter called contextio_token indicating the connect_token related to this callback. You can then do a get on this connect_token to obtain details about the account and source created through that token and save that account id in your own user data.
+          required: true
+          type: string
+        -
+          name: email
+          in: query
+          description: The email address of the account to be added. If specified, the first step of the connect UI where users are prompted for their email address, first name and last name is skipped.
+          required: false
+          type: string
+        -
+          name: first_name
+          in: query
+          description: First name of the account holder.
+          required: false
+          type: string
+        -
+          name: last_name
+          in: query
+          description: Last name of the account holder.
+          required: false
+          type: string
+        -
+          name: source_callback_url
+          in: query
+          description: If specified, we\'ll make a POST request to this URL when the initial sync is completed.
+          required: false
+          type: string
+        -
+          name: source_expunge_on_deleted_flag
+          in: query
+          description: By default, we don\'t filter out messages flagged as deleted. Set this parameter to 1 to turn on this filtering.
+          required: false
+          type: integer
+        -
+          name: source_sync_all_folders
+          in: query
+          description: By default, we filter out some folders like \'Deleted Items\' and \'Spam\'. Set this parameter to 1 to turn off this filtering and show every single folder.
+          required: false
+          type: integer
+        -
+          name: source_raw_file_list
+          in: query
+          description: By default, we filter out files like signature images from the files list. Set this parameter to 1 to turn off this filtering and show every single file attachment.
+          required: false
+          type: integer
+        -
+          name: status_callback_url
+          in: query
+          description: If specified, we\'ll make a POST request to this URL if the connection status of the source changes.
+          required: false
+          type: string
+      responses:
+        200:
+          description: Successful response
+          schema:
+            $ref: '#/definitions/NewConnectToken'
+  /connect_tokens/{token}:
+    get:
+      description: |
+        Information about a given connect token
+      parameters:
+        -
+          name: token
+          in: path
+          description: The unique random token used to add a second source to an existing account
+          required: true
+          type: string
+      responses:
+        200:
+          description: Successful response
+          schema:
+            $ref: '#/definitions/ConnectToken'            
+    delete:
+      description: |
+        Remove a given connect token
+      parameters:
+        -
+          name: token
+          in: path
+          description: The unique random token used to add a second source to an existing account
+          required: true
+          type: string
+      responses:
+        200:
+          description: Successful response
+          schema:
+            $ref: '#/definitions/Result'
   /discovery:
     get:
       description: |
@@ -2436,6 +2824,265 @@ paths:
           schema:
             $ref: '#/definitions/Result'
 # todo https://context.io/docs/2.0/webhooks
+
+
+
+
+
+
+  /webhooks:
+    get:
+      description: |
+        Listing of webhooks
+      responses:
+        200:
+          description: Successful response
+          schema:
+            title: ArrayOfWebhooks
+            type: array
+            items:
+              $ref: '#/definitions/Webhook'
+    post:
+      description: |
+        Create a new WebHook
+      parameters:
+        -
+          name: callback_url
+          in: query
+          description: A valid URL Context.IO calls when a matching message is found. The callback URL is called with an HTTP POST with message information in request body, see receiving webhook callbacks.
+          required: true
+          type: string
+        -
+          name: failure_notif_url
+          in: query
+          description: "A valid URL Context.IO calls if the WebHooks fails and will no longer be active. That may happen if, for example, the server becomes unreachable or if it closes an IDLE connection and we can't re-establish it. The callback URL is called with an HTTP POST with more information in request body, see receiving failure notifications."
+          required: false
+          type: string
+        -
+          name: filter_to
+          in: query
+          description: Check for new messages sent to a given name or email address. Also accepts a comma delimited list of email addresses.
+          required: false
+          type: string
+        -
+          name: filter_from
+          in: query
+          description: Check for new messages received from a given name or email address. Also accepts a comma delimited list of email addresses.
+          required: false
+          type: string
+        -
+          name: filter_cc
+          in: query
+          description: "Check for new messages where a given name or email address is cc'ed. Also accepts a comma delimited list of email addresses."
+          required: false
+          type: string
+        -
+          name: filter_subject
+          in: query
+          description: Check for new messages with a subject matching a given string or regular expresion
+          required: false
+          type: string
+        -
+          name: filter_thread
+          in: query
+          description: Check for new messages in a given thread. Value can be a gmail_thread_id or the email_message_id of an existing message currently in the thread.
+          required: false
+          type: string
+        -
+          name: filter_file_name
+          in: query
+          description: Check for new messages where a file whose name matches the given string is attached. Supports wildcards and regular expressions like the file_name parameter of the files list call.
+          required: false
+          type: string
+        -
+          name: filter_folder_added
+          in: query
+          description: Check for messages filed in a given folder. On Gmail, this is equivalent to having a label applied to a message. The value should be the complete name (including parents if applicable) of the folder you want to track.
+          required: false
+          type: string
+        -
+          name: filter_folder_removed
+          in: query
+          description: Check for messages removed from a given folder. On Gmail, this is equivalent to having a label removed from a message. The value should be the complete name (including parents if applicable) of the folder you want to track.
+          required: false
+          type: string
+        -
+          name: filter_to_domain
+          in: query
+          description: Check for new messages sent to a given domain. Also accepts a comma delimited list of domains.
+          required: false
+          type: string
+        -
+          name: filter_from_domain
+          in: query
+          description: Check for new messages sent from a given domain. Also accepts a comma delimited list of domains.
+          required: false
+          type: string
+        -
+          name: include_body
+          in: query
+          require: false
+          type: integer 
+          description: Set to 1 to include message bodies in the result.
+        -
+          name: body_type
+          in: query
+          require: false
+          type: string
+          description: Used when include_body is set to get only body parts of a given MIME-type (for example text/html) 
+        -
+          name: include_header
+          in: query
+          require: false
+          type: integer 
+          description: Set to 1 or raw to include message headers in the result.
+      responses:
+        200:
+          description: Successful response
+          schema:
+            $ref: '#/definitions/NewWebhook'
+  /webhooks/{webhook_id}:
+    get:
+      description: |
+        Properties of a given WebHook
+      parameters:
+        -
+          name: webhook_id
+          in: path
+          description: Unique id of the webhook instance.
+          required: true
+          type: string
+      responses:
+        200:
+          description: Successful response
+          schema:
+            $ref: '#/definitions/Webhook'
+    post:
+      description: |
+        Change properties of a given WebHook
+      parameters: #todo test these as the documentation is missing
+        -
+          name: webhook_id
+          in: path
+          description: Unique id of the webhook instance.
+          required: true
+          type: string
+        -
+          name: callback_url
+          in: query
+          description: A valid URL Context.IO calls when a matching message is found. The callback URL is called with an HTTP POST with message information in request body, see receiving webhook callbacks.
+          required: true
+          type: string
+        -
+          name: failure_notif_url
+          in: query
+          description: "A valid URL Context.IO calls if the WebHooks fails and will no longer be active. That may happen if, for example, the server becomes unreachable or if it closes an IDLE connection and we can't re-establish it. The callback URL is called with an HTTP POST with more information in request body, see receiving failure notifications."
+          required: true
+          type: string
+        -
+          name: active
+          in: query
+          description: The active property of a WebHook allows you to pause (set to 0) or resume (set to 1) it.
+          required: false
+          type: integer
+        -
+          name: filter_to
+          in: query
+          description: Check for new messages sent to a given name or email address. Also accepts a comma delimited list of email addresses.
+          required: false
+          type: string
+        -
+          name: filter_from
+          in: query
+          description: Check for new messages received from a given name or email address. Also accepts a comma delimited list of email addresses.
+          required: false
+          type: string
+        -
+          name: filter_cc
+          in: query
+          description: "Check for new messages where a given name or email address is cc'ed. Also accepts a comma delimited list of email addresses."
+          required: false
+          type: string
+        -
+          name: filter_subject
+          in: query
+          description: Check for new messages with a subject matching a given string or regular expresion
+          required: false
+          type: string
+        -
+          name: filter_thread
+          in: query
+          description: Check for new messages in a given thread. Value can be a gmail_thread_id or the email_message_id of an existing message currently in the thread.
+          required: false
+          type: string
+        -
+          name: filter_file_name
+          in: query
+          description: Check for new messages where a file whose name matches the given string is attached. Supports wildcards and regular expressions like the file_name parameter of the files list call.
+          required: false
+          type: string
+        -
+          name: filter_folder_added
+          in: query
+          description: Check for messages filed in a given folder. On Gmail, this is equivalent to having a label applied to a message. The value should be the complete name (including parents if applicable) of the folder you want to track.
+          required: false
+          type: string
+        -
+          name: filter_folder_removed
+          in: query
+          description: Check for messages removed from a given folder. On Gmail, this is equivalent to having a label removed from a message. The value should be the complete name (including parents if applicable) of the folder you want to track.
+          required: false
+          type: string
+        -
+          name: filter_to_domain
+          in: query
+          description: Check for new messages sent to a given domain. Also accepts a comma delimited list of domains.
+          required: false
+          type: string
+        -
+          name: filter_from_domain
+          in: query
+          description: Check for new messages sent from a given domain. Also accepts a comma delimited list of domains.
+          required: false
+          type: string
+        -
+          name: include_body
+          in: query
+          require: false
+          type: integer 
+          description: Set to 1 to include message bodies in the result.
+        -
+          name: body_type
+          in: query
+          require: false
+          type: string
+          description: Used when include_body is set to get only body parts of a given MIME-type (for example text/html) 
+        -
+          name: include_header
+          in: query
+          require: false
+          type: integer 
+          description: Set to 1 or raw to include message headers in the result.
+      responses:
+        200:
+          description: Successful response
+          schema:
+            $ref: '#/definitions/ResultWithFeedbackCode'
+    delete:
+      description: |
+        Cancel a webhook
+      parameters:
+        -
+          name: webhook_id
+          in: path
+          description: Unique id of the webhook instance.
+          required: true
+          type: string
+      responses:
+        200:
+          description: Successful response
+          schema:
+            $ref: '#/definitions/Result'
 definitions:
   Account:
     properties:
@@ -2488,7 +3135,7 @@ definitions:
         type: string
         description: Full URI of resource created
       source:
-        $ref: "#/definitions/Source"
+        $ref: '#/definitions/Source'
       access_token:
         type: string
         description: OAuth access token to sign all future requests on this newly created account
@@ -2516,13 +3163,21 @@ definitions:
       connection_log:
         type: string
         description: If the call failed, This will contain error messages from IMAP server
+  ResultWithFeedbackCode:
+    properties:
+      success:
+        type: boolean
+        description: true on method success (HTTP status 200), false on error
+      feedbackCode:
+        type: string
+        description: Information about the request
   ResultWithFlags:
     properties:
       success:
         type: boolean
         description: true on method success (HTTP status 200), false on error
       flags:
-        $ref = "#/definitions/Flags"
+        $ref = '#/definitions/Flags'
   IMAPSettings:
     properties:
       email:
@@ -2540,7 +3195,7 @@ definitions:
           type: string
         description: List of documentation pages that may be useful for end-users for this specific IMAP provider
       imap: 
-        $ref: "#/definitions/IMAP"
+        $ref: '#/definitions/IMAP'
   IMAP:
     properties:
       server:
@@ -2585,7 +3240,7 @@ definitions:
         type: string
         description: Last name specified on token creation
       account:
-        $ref: "#/definitions/Account"
+        $ref: '#/definitions/Account'
   NewConnectToken:
     properties:
       success:
@@ -2651,11 +3306,11 @@ definitions:
   ContactList:
     properties:
       query:
-        $ref: "#/definitions/ContactQuery"
+        $ref: '#/definitions/ContactQuery'
       matches:
         type: array
         items:
-          $ref: "#/definitions/Contact"
+          $ref: '#/definitions/Contact'
   FileInfo:
     properties:
       size:
@@ -2674,16 +3329,16 @@ definitions:
         type: number
         description: Time this message was first seen by Context.IO (Unix timestamp)
       addresses:
-        $ref: "#/definitions/Addresses"
-        description: Email addresses and names of sender and recipients (more details)
+        $ref: '#/definitions/Addresses'
+        description: Email addresses and names of sender and recipients
 # TODO https://context.io/docs/2.0/messagepersoninfo
-#      person_info:
-#        type: object
-#        description: Additional info about contacts on the message (more details)
+      person_info:
+        $ref: '#/definitions/PersonInfo'
+        description: Additional info about contacts on the message
       file_name:
         type: string
         description: Name of file
-# arra of arrays https://context.io/docs/2.0/filenamestructure
+# array of arrays https://context.io/docs/2.0/filenamestructure
       file_name_structure:
         type: array
         items:
@@ -2730,25 +3385,25 @@ definitions:
   Addresses:
     properties:
       from:
-        $ref: "#/definitions/Address"
+        $ref: '#/definitions/Address'
       to:
         type: array
         items:
-          $ref: "#/definitions/Address"
+          $ref: '#/definitions/Address'
       cc:
         type: array
         items:
-          $ref: "#/definitions/Address"
+          $ref: '#/definitions/Address'
   MessageInfo:
     properties:
       email_message_id:
         type: string
         description: Value of RFC-822 Message-ID header
       addresses:
-        $ref: "#/definitions/Addresses"
+        $ref: '#/definitions/Addresses'
         description: Email addresses and names of sender and recipients (more details)
       person_info:
-        $ref: "#/definitions/PersonInfo"
+        $ref: '#/definitions/PersonInfo'
         description: Additional info about contacts on the message (more details)
       message_id:
         type: string
@@ -2776,11 +3431,11 @@ definitions:
       sources:
         type: array
         items:
-          $ref: "#/definitions/Source"
+          $ref: '#/definitions/Source'
       files:
         type: array
         items:
-          $ref: "#/definitions/FileInfo"
+          $ref: '#/definitions/FileInfo'
   EmailAlias:
     properties:
       email:
@@ -2843,7 +3498,7 @@ definitions:
         type: string
         description: Special-use attribute of this folder (if and only if the server supports it and applicable to this folder)
       attributes:
-        $ref: "#/definitions/Attributes"
+        $ref: '#/definitions/Attributes'
         description: IMAP Attributes of the folder given as a hash
       delim:
         type: string
@@ -2859,7 +3514,7 @@ definitions:
       type: string
   PersonInfo:
     additionalProperties:
-      $ref: "#/definitions/ThumbnailUrl"
+      $ref: '#/definitions/ThumbnailUrl'
   ThumbnailUrl:
     properties:
       thumbnail:
@@ -2876,8 +3531,66 @@ definitions:
           type: string
         description: List of email_message_ids forming the thread
       person_info:
-        $ref: "#/definitions/PersonInfo"
+        $ref: '#/definitions/PersonInfo'
       messages:
         type: array
         items:
-          $ref: "#/definitions/MessageInfo"
+          $ref: '#/definitions/MessageInfo'
+  Webhook:
+    properties:
+      developerId:
+        type: string
+        description: your developer ID
+      version:
+        type: string
+        description: the verison of the API this webhook applies to.
+      resource_url:
+        type: string
+        description: Complete URL of the new webhook
+      callback_url:
+        type: string
+        description: "Your callback URL to which we'll POST message data"
+      failure_notif_url:
+        type: string
+        description: Your callback URL for failure notifications 
+      active:
+        type: boolean
+        description: Whether this webhook is currently applied to new messages we find in the account or not
+      failure:
+        type: boolean
+        description: "true means we're having issues connecting to the account and gave up after a couple retries. The failure_notif_url is called when a webhook's failure property becomes true."
+      webhook_id:
+        type: string
+        description: Id of the webhook
+      additionalProperties: #filter_* Value of a filter assigned to this webhook when created
+        type: string
+  NewWebhook:
+    properties:
+      success:
+        type: boolean
+        description: Whether the operation worked
+      webhook_id:
+        type: string
+        description: Id of the webhook
+      resource_url:
+        type: string
+        description: Complete URL of the new webhook
+  WebhookCallback:
+    properties:
+      account_id:
+        type: string
+        description: Account who owns the webhook
+      webhook_id:
+        type: string
+        description: Id of the webhook that has been triggered 
+      timestamp:
+        type: number
+        description: Server time for the request as a Unix timestamp
+      token:
+        type: string
+        description: Random string used to calculate signature
+      signature:
+        type: string
+        description: HMAC-SHA256 hash of the timestamp and token with your Context.IO secret as the hashing key
+      message_data:
+        $ref: '#/descriptions/MessageInfo'
